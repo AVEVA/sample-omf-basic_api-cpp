@@ -101,6 +101,8 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     // Prepare the payload
     req.prepare_payload();
 
+    std::cout << req << std::endl;
+
     // Send the HTTP request to the remote host
     http::write(stream, req);
 
@@ -130,6 +132,9 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
         std::cout << "Response from relay was bad " << std::endl << res << std::endl;
         throw http::error{};
     }
+
+
+    std::cout << res << std::endl;
 
     // Parse the response body as json
     return json::parse(res.body());
