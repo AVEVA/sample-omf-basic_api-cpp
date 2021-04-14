@@ -34,7 +34,6 @@ using base64 = cppcodec::base64_rfc4648; // from <cppcodec/base64_rfc4648.hpp>
 
 enum ENDPOINTS { OCS, EDS, PI };
 
-
 json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::map<http::field, std::string> authentication = {})
 {
     // parse endpoint
@@ -61,9 +60,6 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     // The io_context is required for all I/O
     net::io_context ioc;
 
-    // The SSL context is required, and holds certificates
-
-
     // These objects perform our I/Ok
     tcp::resolver resolver(ioc);
 
@@ -84,18 +80,14 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
         beast::ssl_stream<beast::tcp_stream> stream(ioc, ctx);
 
         // Set SNI Hostname (many hosts need this to handshake successfully)
-        if (!SSL_set_tlsext_host_name(stream.native_handle(), &host))
-        {
-            beast::error_code ec{ static_cast<int>(::ERR_get_error()), net::error::get_ssl_category() };
-            throw beast::system_error{ ec };
-        }
+        SSL_set_tlsext_host_name(stream.native_handle(), &host);
 
         // Look up the domain name
         auto const results = resolver.resolve(host, port);
 
         // Make the connection on the IP address we get from a lookup
         beast::get_lowest_layer(stream).connect(results);
-
+        
         // Perform the SSL handshake if needed
         stream.handshake(ssl::stream_base::client);
 
@@ -386,8 +378,6 @@ int main(bool test = false)
                 std::cout << "You are not verifying the certificate of the end point. ";
                 std::cout << "This is not advised for any system as there are security issues with doing this." << std::endl;
             }*/
-
-            getToken(endpoint.as_object());
             
             // Step 5 - Send OMF Types
             for (auto& omf_type : omf_types)
@@ -398,7 +388,7 @@ int main(bool test = false)
             // Step 6 - Send OMF Containers
             for (auto& omf_container : omf_containers)
             {
-
+                sendMessageToOmfEndpoint(endpoint.as_object(), "container", "[" + json::serialize(omf_container) + "]");
             }
 
         }
@@ -415,7 +405,7 @@ int main(bool test = false)
 
             for (auto& omf_datum : omf_data)
             {
-
+                
             }
 
             std::chrono::seconds timespan(1);
