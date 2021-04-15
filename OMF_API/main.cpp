@@ -1,5 +1,6 @@
 #include "root_certificates.hpp"
 
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/ssl.hpp>
@@ -33,6 +34,11 @@ using base64 = cppcodec::base64_rfc4648; // from <cppcodec/base64_rfc4648.hpp>
 #define TYPE_PI "PI"
 
 enum ENDPOINTS { OCS, EDS, PI };
+
+
+bool value1 = false;
+bool value2 = false;
+
 
 json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::map<http::field, std::string> authentication = {})
 {
@@ -352,6 +358,46 @@ json::array getAppSettings()
     return app_settings;
 }
 
+std::string getCurrentTime()
+{
+    using namespace boost::posix_time;
+    ptime current_time = microsec_clock::universal_time();
+    return to_iso_extended_string(current_time) + "Z";
+}
+
+void getData(json::object& data) 
+{
+    std::string container_id = json::value_to<std::string>(data.at("containerid"));
+
+    json::array* values = &data.at("values").as_array();
+    json::object* value = &values->at(0).as_object();
+
+    if (container_id == "Container1" || container_id == "Container2")
+    {
+        value->at("IntegerProperty") = rand() % 100;
+        value->at("timestamp") = getCurrentTime();  
+    }
+    else if (container_id == "Container3")
+    {
+        value2 = !value2;
+        value->at("timestamp") = getCurrentTime();
+        value->at("NumberProperty1") = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+        value->at("NumberProperty2") = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+        if (value2)
+            value->at("StringEnum") = "True";
+        else
+            value->at("StringEnum") = "False";
+    }
+    else if (container_id == "Container4")
+    {
+        value1 = !value1;
+        value->at("timestamp") = getCurrentTime();
+        value->at("IntegerEnum") = static_cast <int> (value1);
+    }
+    else
+        std::cout << "Container " << container_id << " not recognized";
+}
+
 int main(bool test = false)
 {
     // Step 1 - Read endpoint configurations from config.json
@@ -405,7 +451,14 @@ int main(bool test = false)
 
             for (auto& omf_datum : omf_data)
             {
+                getData(omf_datum.as_object());
                 
+                for (auto& endpoint : endpoints)
+                {
+                    sendMessageToOmfEndpoint(endpoint.as_object(), "data", "[" + json::serialize(omf_datum) + "]");
+                }
+
+                std::cout << omf_datum << std::endl;
             }
 
             std::chrono::seconds timespan(1);
