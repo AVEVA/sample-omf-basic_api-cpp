@@ -37,8 +37,6 @@ enum ENDPOINTS { OCS, EDS, PI };
 
 json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::map<http::field, std::string> authentication = {});
 
-json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", bool verify_ssl = true, std::map<http::field, std::string> authentication = {});
-
 json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::string root_cert_path = "", std::map<http::field, std::string> authentication = {});
 
 std::string getToken(json::object& endpoint);

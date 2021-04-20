@@ -106,128 +106,6 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     return json::parse(res_body);
 }
 
-json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, bool verify_ssl, std::map<http::field, std::string> authentication)
-{
-    // parse endpoint
-    std::vector<std::string> split_endpoint;
-    boost::split(split_endpoint, endpoint, boost::is_any_of("/"));
-    std::string host = split_endpoint.at(2);
-
-    // parse host
-    std::vector<std::string> split_host;
-    boost::split(split_host, host, boost::is_any_of(":"));
-    host = split_host.at(0);
-
-    // parse port
-    std::string port = "443";
-    if (split_host.size() == 2)
-        port = split_host.at(1);
-
-    // parse path
-    std::string path = "";
-    for (int i = 3; i < split_endpoint.size(); i++)
-        path += "/" + split_endpoint.at(i);
-
-    // The io_context is required for all I/O
-    net::io_context ioc;
-
-    // These objects perform our I/Ok
-    tcp::resolver resolver(ioc);
-
-    // Declare a container to hold the response
-    http::response<http::string_body> res;
-
-    ssl::context ctx(ssl::context::tlsv12_client);
-
-    if (verify_ssl)
-    {
-        // This holds the root certificate used for verification
-        //load_root_certificates(ctx);
-
-        // Verify the remote server's certificate
-        ctx.set_verify_mode(ssl::verify_none);
-    }
-    else
-        ctx.set_verify_mode(ssl::verify_none);
-
-    beast::ssl_stream<beast::tcp_stream> stream(ioc, ctx);
-
-    // Set SNI Hostname (many hosts need this to handshake successfully)
-    SSL_set_tlsext_host_name(stream.native_handle(), &host);
-
-    // Look up the domain name
-    auto const results = resolver.resolve(host, port);
-
-    // Make the connection on the IP address we get from a lookup
-    beast::get_lowest_layer(stream).connect(results);
-
-    // Perform the SSL handshake if needed
-    stream.handshake(ssl::stream_base::client);
-
-    // Set up an HTTP GET request message
-    http::request<http::string_body> req{ verb, path, 11 };
-    req.set(http::field::host, host);
-    req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-
-    // Set body if applicable
-    if (!request_body.empty())
-        req.body() = request_body;
-
-    // Set headers
-    for (auto const& x : request_headers)
-        req.set(x.first, x.second);
-
-    // Set authentication
-    for (auto const& x : authentication)
-        req.set(x.first, x.second);
-
-    // Prepare the payload
-    req.prepare_payload();
-
-    // Send the HTTP request to the remote host
-    http::write(stream, req);
-
-    // This buffer is used for reading and must be persisted
-    beast::flat_buffer buffer;
-
-    // Receive the HTTP response
-    http::read(stream, buffer, res);
-
-    /*
-    // Gracefully close the stream (this can hand the thread)
-    beast::error_code ec;
-    stream.shutdown(ec);
-    if (ec == net::error::eof)
-        ec = {};
-    if (ec != boost::asio::ssl::error::stream_truncated)
-        throw beast::system_error{ ec };
-    */
-
-    if (res.result() == http::int_to_status(409))
-        return NULL;
-
-    // response code in 200s if the request was successful!
-    if (res.result() < http::int_to_status(200) || res.result() >= http::int_to_status(300))
-    {
-        std::cout << "Response from relay was bad " << std::endl << res << std::endl;
-        throw http::error{};
-    }
-
-    std::string res_body = res.body();
-
-    // Check if body empty
-    if (res_body.size() == 0)
-        return json::parse("{}");
-
-    // Remove endianness information if present
-    if (res_body[0] != '{')
-        res_body = res_body.erase(0, 3);
-
-    // Parse the response body as json
-    std::cout << res_body << std::endl;
-    return json::parse(res_body);
-}
-
 json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
 {
     // parse endpoint
@@ -386,10 +264,9 @@ std::string getToken(json::object& endpoint)
     std::map<std::string, std::string> request_headers = { {"Accept", "application/json",} };
 
     json::value response_body = {};
-    if (endpoint.at("verify_ssl").is_bool())
-        response_body = httpsRequest(http::verb::get, open_id_endpoint, request_headers, "", json::value_to<bool>(endpoint.at("verify_ssl")));
-    else
-        response_body = httpsRequest(http::verb::get, open_id_endpoint, request_headers, "", json::value_to<std::string>(endpoint.at("verify_ssl")));
+
+    std::string certificate_path = json::value_to<std::string>(endpoint.at("verify_ssl"));
+    response_body = httpsRequest(http::verb::get, open_id_endpoint, request_headers, "", certificate_path);
 
     std::string token_url = json::value_to<std::string>(response_body.at("token_endpoint"));
 
@@ -400,10 +277,7 @@ std::string getToken(json::object& endpoint)
     request_headers = { {"Content-Type", "application/x-www-form-urlencoded",}, {"Accept", "*/*",} };
 
     json::value token;
-    if (endpoint.at("verify_ssl").is_bool())
-        token = httpsRequest(http::verb::post, token_url, request_headers, request_body, json::value_to<bool>(endpoint.at("verify_ssl")));
-    else
-        token = httpsRequest(http::verb::post, token_url, request_headers, request_body, json::value_to<std::string>(endpoint.at("verify_ssl")));
+    token = httpsRequest(http::verb::post, token_url, request_headers, request_body, certificate_path);
 
     // store the token to save on unecessary calls
     time = std::chrono::system_clock::now().time_since_epoch();
@@ -464,28 +338,8 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     if (split_endpoint.at(0) != "https:")
         ssl = false;
 
-    if (endpoint.at("verify_ssl").is_bool() && ssl)
-    {
-        response = httpsRequest(
-            http::verb::post,
-            json::value_to<std::string>(endpoint.at("omf_endpoint")),
-            request_headers,
-            omf_message,
-            json::value_to<bool>(endpoint.at("verify_ssl")),
-            authentication
-        );
-    }
-    else if (endpoint.at("verify_ssl").is_bool() && !ssl)
-    {
-        response = httpRequest(
-            http::verb::post,
-            json::value_to<std::string>(endpoint.at("omf_endpoint")),
-            request_headers,
-            omf_message,
-            authentication
-        );
-    }
-    else if (!endpoint.at("verify_ssl").is_bool() && ssl)
+
+    if (ssl)
     {
         response = httpsRequest(
             http::verb::post,
@@ -568,7 +422,7 @@ json::array getAppSettings()
 
         // check for optional/nullable parameters
         if (!endpoint.contains("verify_ssl"))
-            endpoint["verify_ssl"] = true;
+            endpoint["verify_ssl"] = "";
 
         if (!endpoint.contains("use_compression"))
             endpoint["use_compression"] = false;
