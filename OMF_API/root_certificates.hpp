@@ -10,6 +10,7 @@
 #ifndef BOOST_BEAST_EXAMPLE_COMMON_ROOT_CERTIFICATES_HPP
 #define BOOST_BEAST_EXAMPLE_COMMON_ROOT_CERTIFICATES_HPP
 
+#include <iostream>
 #include <boost/asio/ssl.hpp>
 #include <string>
 
@@ -113,6 +114,64 @@ namespace detail {
             "fQyshjlPP9mYVxWOxqctUdQ8UnsUKKGEUcVrA08i1OAnVKlPFjKBvk+r7jpsTPcr\n"
             "9pWXTO9JrYMML7d+XRSZA1n3856OqZDX4403+9FnXCvfcLZLLKTBvwwFgEFGpzjK\n"
             "UEVbkhd5qstF6qWK\n"
+            "-----END CERTIFICATE-----\n"
+
+            "-----BEGIN CERTIFICATE-----\n"
+            "MIIDXzCCAkegAwIBAgILBAAAAAABIVhTCKIwDQYJKoZIhvcNAQELBQAwTDEgMB4\n"
+            "GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbF\n"
+            "NpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wHhcNMDkwMzE4MTAwMDAwWhcNMjkwM\n"
+            "zE4MTAwMDAwWjBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzET\n"
+            "MBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2lnbjCCASIwDQY\n"
+            "JKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMwldpB5BngiFvXAg7aEyiie/QV2Ec\n"
+            "WtiHL8RgJDx7KKnQRfJMsuS+FggkbhUqsMgUdwbN1k0ev1LKMPgj0MK66X17YUh\n"
+            "hB5uzsTgHeMCOFJ0mpiLx9e+pZo34knlTifBtc+ycsmWQ1z3rDI6SYOgxXG71uL\n"
+            "0gRgykmmKPZpO/bLyCiR5Z2KYVc3rHQU3HTgOu5yLy6c+9C7v/U9AOEGM+iCK65\n"
+            "TpjoWc4zdQQ4gOsC0p6Hpsk+QLjJg6VfLuQSSaGjlOCZgdbKfd/+RFO+uIEn8rU\n"
+            "AVSNECMWEZXriX7613t2Saer9fwRPvm2L7DWzgVGkWqQPabumDk3F2xmmFghcCA\n"
+            "wEAAaNCMEAwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O\n"
+            "BBYEFI/wS3+oLkUkrk1Q+mOai97i3Ru8MA0GCSqGSIb3DQEBCwUAA4IBAQBLQNv\n"
+            "AUKr+yAzv95ZURUm7lgAJQayzE4aGKAczymvmdLm6AC2upArT9fHxD4q/c2dKg8\n"
+            "dEe3jgr25sbwMpjjM5RcOO5LlXbKr8EpbsU8Yt5CRsuZRj+9xTaGdWPoO4zzUhw\n"
+            "8lo/s7awlOqzJCK6fBdRoyV3XpYKBovHd7NADdBj+1EbddTKJd+82cEHhXXipa0\n"
+            "095MJ6RMG3NzdvQXmcIfeg7jLQitChws/zyrVQ4PkX4268NXSb7hLi18YIvDQVE\n"
+            "TI53O9zJrlAGomecsMx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o2HLO02\n"
+            "JQZR7rkpeDMdmztcpHWD9f\n"
+            "-----END CERTIFICATE-----\n"
+
+            "-----BEGIN CERTIFICATE-----\n"
+            "MIIB/zCCAWigAwIBAgIICNjkAITvCQ8wDQYJKoZIhvcNAQELBQAwIjEgMB4GA1UE\n"
+            "AwwXY2JhcmRpbmktYWYub3Npc29mdC5pbnQwHhcNMjEwMzEwMjAxMDE1WhcNMzYw\n"
+            "NjA0MTYwMDAwWjAiMSAwHgYDVQQDDBdjYmFyZGluaS1hZi5vc2lzb2Z0LmludDCB\n"
+            "nzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAt3Qg32cxBoYL6cQtNpLi+uKlWh1M\n"
+            "ZXUAAIczaIX+z5riiBT1te9k8/65/L7ta+f3WaSz2pSTjYZQHRo8sQoTLd57B13U\n"
+            "dmlgMvFiJ2YkrPyj6hfOpq3y1HEXgjUYRIxq15fKFFskjn/3QbKK7UfGTBFTV7PR\n"
+            "l7bU7bbvR3TAnVECAwEAAaM+MDwwOgYDVR0RBDMwMYIXY2JhcmRpbmktYWYub3Np\n"
+            "c29mdC5pbnSCC2NiYXJkaW5pLWFmgglsb2NhbGhvc3QwDQYJKoZIhvcNAQELBQAD\n"
+            "gYEANpMQfhm73HH58Ni+Ghczb6JvQBr9JLQoWal+rLG8KibCctKYV5z5CHZL2O+m\n"
+            "1qvLV6gk4889fMLRFyctXghgkW1FHoeTaJ7BKhv7r07SNqUyDCJai7LOWi4c4XdN\n"
+            "BGcMPQuIupYI0U/mvWlH8MmI2YZ9Li3OOBPNxBl0IWtFbfg=\n"
+            "-----END CERTIFICATE-----\n"
+
+            "-----BEGIN CERTIFICATE-----\n"
+            "MIIDdTCCAl2gAwIBAgILBAAAAAABFUtaw5QwDQYJKoZIhvcNAQEFBQAwVzELMAkG\n"
+            "A1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExEDAOBgNVBAsTB1Jv\n"
+            "b3QgQ0ExGzAZBgNVBAMTEkdsb2JhbFNpZ24gUm9vdCBDQTAeFw05ODA5MDExMjAw\n"
+            "MDBaFw0yODAxMjgxMjAwMDBaMFcxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i\n"
+            "YWxTaWduIG52LXNhMRAwDgYDVQQLEwdSb290IENBMRswGQYDVQQDExJHbG9iYWxT\n"
+            "aWduIFJvb3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDaDuaZ\n"
+            "jc6j40+Kfvvxi4Mla+pIH/EqsLmVEQS98GPR4mdmzxzdzxtIK+6NiY6arymAZavp\n"
+            "xy0Sy6scTHAHoT0KMM0VjU/43dSMUBUc71DuxC73/OlS8pF94G3VNTCOXkNz8kHp\n"
+            "1Wrjsok6Vjk4bwY8iGlbKk3Fp1S4bInMm/k8yuX9ifUSPJJ4ltbcdG6TRGHRjcdG\n"
+            "snUOhugZitVtbNV4FpWi6cgKOOvyJBNPc1STE4U6G7weNLWLBYy5d4ux2x8gkasJ\n"
+            "U26Qzns3dLlwR5EiUWMWea6xrkEmCMgZK9FGqkjWZCrXgzT/LCrBbBlDSgeF59N8\n"
+            "9iFo7+ryUp9/k5DPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E\n"
+            "BTADAQH/MB0GA1UdDgQWBBRge2YaRQ2XyolQL30EzTSo//z9SzANBgkqhkiG9w0B\n"
+            "AQUFAAOCAQEA1nPnfE920I2/7LqivjTFKDK1fPxsnCwrvQmeU79rXqoRSLblCKOz\n"
+            "yj1hTdNGCbM+w6DjY1Ub8rrvrTnhQ7k4o+YviiY776BQVvnGCv04zcQLcFGUl5gE\n"
+            "38NflNUVyRRBnMRddWQVDf9VMOyGj/8N7yy5Y0b2qvzfvGn9LhJIZJrglfCm7ymP\n"
+            "AbEVtQwdpf5pLGkkeB6zpxxxYu7KyJesF12KwvhHhm4qxFYxldBniYUr+WymXUad\n"
+            "DKqC5JlR3XC321Y9YeRq4VzW9v493kHMB65jUr9TU/Qr6cf9tveCX4XSQRjbgbME\n"
+            "HMUfpIBvFSDJ3gyICh3WZlXi/EjJKSZp4A==\n"
             "-----END CERTIFICATE-----\n";
         ;
 

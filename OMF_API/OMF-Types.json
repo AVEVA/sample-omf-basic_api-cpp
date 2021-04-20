@@ -6,7 +6,7 @@
     "type": "object",
     "description": "not in use",
     "properties": {
-      "timestamp": {
+      "Timestamp": {
         "format": "date-time",
         "type": "string",
         "isindex": true,
@@ -26,7 +26,7 @@
     "type": "object",
     "description": "not in use",
     "properties": {
-      "timestamp": {
+      "Timestamp": {
         "format": "date-time",
         "type": "string",
         "isindex": true,
@@ -58,7 +58,7 @@
     "type": "object",
     "description": "not in use",
     "properties": {
-      "timestamp": {
+      "Timestamp": {
         "format": "date-time",
         "type": "string",
         "isindex": true,
