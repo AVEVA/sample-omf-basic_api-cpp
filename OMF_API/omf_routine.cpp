@@ -473,7 +473,7 @@ void getData(json::object& data)
         std::cout << "Container " << container_id << " not recognized";
 }
 
-bool omf_routine(bool test)
+bool omf_routine(json::array& sent_data, bool test)
 {
     // Step 1 - Read endpoint configurations from config.json
     json::array endpoints = getAppSettings();
@@ -494,11 +494,11 @@ bool omf_routine(bool test)
         //Send out the messages that only need to be sent once
         for (auto& endpoint : endpoints)
         {
-            /*if (!json::value_to<bool>(endpoint.at("verify_ssl")))
+            if (json::value_to<std::string>(endpoint.at("verify_ssl")) == "")
             {
-                std::cout << "You are not verifying the certificate of the end point. ";
-                std::cout << "This is not advised for any system as there are security issues with doing this." << std::endl;
-            }*/
+                std::cout << "You are not verifying the certificate of the end point. "
+                    << "This is not advised for any system as there are security issues with doing this." << std::endl;
+            }
 
             // Step 5 - Send OMF Types
             for (auto& omf_type : omf_types)
@@ -532,6 +532,9 @@ bool omf_routine(bool test)
                 {
                     sendMessageToOmfEndpoint(endpoint.as_object(), "data", "[" + json::serialize(omf_datum) + "]");
                 }
+
+                if (test && count == 1)
+                    sent_data.emplace_back(omf_datum);
 
                 std::cout << omf_datum << std::endl;
             }

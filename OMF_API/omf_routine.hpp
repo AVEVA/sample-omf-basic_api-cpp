@@ -51,6 +51,6 @@ std::string getCurrentTime();
 
 void getData(json::object& data);
 
-bool omf_routine(bool test = false);
+bool omf_routine(json::array& sent_data, bool test = false);
 
 #endif
