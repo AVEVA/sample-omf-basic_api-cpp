@@ -47,17 +47,21 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     req.set(http::field::host, host);
     req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
-    // Set body if applicable
-    if (!request_body.empty())
-        req.body() = request_body;
-
-    // Set headers
+    // Set headers and compress the request_body if applicable
     for (auto const& x : request_headers)
+    {
         req.set(x.first, x.second);
+        if (x.first == "compression")
+            request_body = gzipCompress(request_body);
+    }
 
     // Set authentication
     for (auto const& x : authentication)
         req.set(x.first, x.second);
+
+    // Set body if applicable
+    if (!request_body.empty())
+        req.body() = request_body;
 
     // Prepare the payload
     req.prepare_payload();
@@ -184,17 +188,21 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     req.set(http::field::host, host);
     req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
-    // Set body if applicable
-    if (!request_body.empty())
-        req.body() = request_body;
-
-    // Set headers
+    // Set headers and compress the request_body if applicable
     for (auto const& x : request_headers)
+    {
         req.set(x.first, x.second);
+        if (x.first == "compression")
+            request_body = gzipCompress(request_body);
+    }
 
     // Set authentication
     for (auto const& x : authentication)
         req.set(x.first, x.second);
+
+    // Set body if applicable
+    if (!request_body.empty())
+        req.body() = request_body;
 
     // Prepare the payload
     req.prepare_payload();
@@ -319,6 +327,18 @@ std::string getToken(json::object& endpoint)
     return json::value_to<std::string>(endpoint.at("token"));
 }
 
+std::string gzipCompress(std::string request_body)
+{
+    std::stringstream compressed_body, origin(request_body);
+
+    ios::filtering_streambuf<ios::input> in;
+    in.push(ios::gzip_compressor(ios::gzip_params(ios::gzip::best_compression)));
+    in.push(origin);
+    ios::copy(in, compressed_body);
+
+    return compressed_body.str();
+}
+
 void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action)
 {
     // Compress json omf payload, if specified
@@ -437,7 +457,7 @@ json::array getAppSettings()
 std::string getCurrentTime()
 {
     using namespace boost::posix_time;
-    ptime current_time = microsec_clock::universal_time();
+    ptime current_time = second_clock::universal_time();
     return to_iso_extended_string(current_time) + "Z";
 }
 
