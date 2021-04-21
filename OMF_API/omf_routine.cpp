@@ -308,6 +308,12 @@ std::string getToken(json::object& endpoint)
 
     std::string token_url = json::value_to<std::string>(response_body.at("token_endpoint"));
 
+    // Validate token URL
+    std::vector<std::string> split_token;
+    boost::split(split_token, token_url, boost::is_any_of("/"));
+    assert(split_token.at(0) == "https:");
+    assert(split_token.at(0) + "//" + split_token.at(2) == endpoint.at("resource").as_string());
+
     // Get the token endpoint
     std::string request_body = "client_id=" + client_id +
         "&client_secret=" + client_secret +
@@ -323,7 +329,6 @@ std::string getToken(json::object& endpoint)
     endpoint["expiration"] = json::value_to<long long>(token.at("expires_in")) + seconds;
     endpoint["token"] = token.at("access_token");
 
-    // TODO Validate URL
     return json::value_to<std::string>(endpoint.at("token"));
 }
 
