@@ -344,10 +344,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     // Compress json omf payload, if specified
     std::string compression = "none";
     if (endpoint.at("use_compression").as_bool())
-    {
-        // TODO compressy things
         compression = "gzip";
-    }
 
     // Create message headers and authentication field
     std::map<std::string, std::string> request_headers = {
@@ -372,13 +369,23 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
         authentication = { { http::field::authorization, base64_encoded_credentials, } };
     }
 
-    // TODO validate headers
+    // validate headers to prevent injection attacks
+    std::string valid_headers[7] = { "Authorization", "messagetype", "action", "messageformat", "omfversion", "x-requested-with", "compression" };
+    std::map<std::string, std::string> validated_headers = {};
+    for (auto const& header : request_headers)
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (header.first == valid_headers[i])
+                validated_headers.emplace(header);
+        }
+    }
 
     // Send message to OMF endpoint
     json::value response = request(
         http::verb::post,
         json::value_to<std::string>(endpoint.at("omf_endpoint")),
-        request_headers,
+        validated_headers,
         omf_message,
         json::value_to<std::string>(endpoint.at("verify_ssl")),
         authentication
