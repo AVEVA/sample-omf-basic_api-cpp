@@ -39,6 +39,8 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
 
 json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::string root_cert_path = "", std::map<http::field, std::string> authentication = {});
 
+json::value request(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::string root_cert_path = "", std::map<http::field, std::string> authentication = {});
+
 std::string getToken(json::object& endpoint);
 
 void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action = "create");

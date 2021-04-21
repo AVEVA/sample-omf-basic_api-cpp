@@ -243,6 +243,36 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     return json::parse(res_body);
 }
 
+json::value request(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
+{
+    // determine if SSL is needed
+    std::vector<std::string> split_endpoint;
+    boost::split(split_endpoint, endpoint, boost::is_any_of("/"));
+    bool ssl = true;
+    if (split_endpoint.at(0) != "https:")
+        ssl = false;
+
+    if (ssl)
+    {
+        return httpsRequest(
+            verb,
+            endpoint,
+            request_headers,
+            request_body,
+            root_cert_path,
+            authentication
+        );
+    }
+
+    return httpRequest(
+        verb,
+        endpoint,
+        request_headers,
+        request_body,
+        authentication
+    );
+}
+
 std::string getToken(json::object& endpoint)
 {
     if (endpoint["endpoint_type"] != TYPE_OCS)
@@ -291,7 +321,6 @@ std::string getToken(json::object& endpoint)
 
 void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action)
 {
-
     // Compress json omf payload, if specified
     std::string compression = "none";
     if (endpoint.at("use_compression").as_bool())
@@ -326,42 +355,14 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     // TODO validate headers
 
     // Send message to OMF endpoint
-    json::value response;
-
-    // get omf_endpoint
-    std::string omf_endpoint = json::value_to<std::string>(endpoint.at("omf_endpoint"));
-
-    // determine if SSL is needed
-    std::vector<std::string> split_endpoint;
-    boost::split(split_endpoint, omf_endpoint, boost::is_any_of("/"));
-    bool ssl = true;
-    if (split_endpoint.at(0) != "https:")
-        ssl = false;
-
-
-    if (ssl)
-    {
-        response = httpsRequest(
-            http::verb::post,
-            json::value_to<std::string>(endpoint.at("omf_endpoint")),
-            request_headers,
-            omf_message,
-            json::value_to<std::string>(endpoint.at("verify_ssl")),
-            authentication
-        );
-    }
-    else
-    {
-        response = httpRequest(
-            http::verb::post,
-            json::value_to<std::string>(endpoint.at("omf_endpoint")),
-            request_headers,
-            omf_message,
-            authentication
-        );
-    }
-
-
+    json::value response = request(
+        http::verb::post,
+        json::value_to<std::string>(endpoint.at("omf_endpoint")),
+        request_headers,
+        omf_message,
+        json::value_to<std::string>(endpoint.at("verify_ssl")),
+        authentication
+    );
 }
 
 json::value getJsonFile(std::string path)
@@ -456,8 +457,8 @@ void getData(json::object& data)
     {
         value2 = !value2;
         value->at("Timestamp") = getCurrentTime();
-        value->at("NumberProperty1") = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
-        value->at("NumberProperty2") = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
+        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
         if (value2)
             value->at("StringEnum") = "True";
         else
