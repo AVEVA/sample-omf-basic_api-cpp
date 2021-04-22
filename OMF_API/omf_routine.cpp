@@ -3,6 +3,13 @@
 bool value1 = false;
 bool value2 = false;
 
+/// <summary>Makes http requests via the boost.beast library</summary>
+/// <param name="verb">The http verb</param>
+/// <param name="endpoint">URL to send request to</param>
+/// <param name="request_headers">(optional) Request headers to be sent as part of the request</param>
+/// <param name="request_body">(optional) Plain text body of the request</param>
+/// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
+/// <returns>Json representation of the response body</returns>
 json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::map<http::field, std::string> authentication)
 {
     // parse endpoint
@@ -110,6 +117,15 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     return json::parse(res_body);
 }
 
+/// <summary>Makes https requests via the boost.beast library</summary>
+/// <param name="verb">The http verb</param>
+/// <param name="endpoint">URL to send request to</param>
+/// <param name="request_headers">(optional) Request headers to be sent as part of the request</param>
+/// <param name="request_body">(optional) Plain text body of the request</param>
+/// <param name="root_cert_path">(optional) The path to the base64 encoded root certificate for the endpoint. 
+/// This is used in ssl certificate verification</param>
+/// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
+/// <returns>Json representation of the response body</returns>
 json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
 {
     // parse endpoint
@@ -251,6 +267,15 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     return json::parse(res_body);
 }
 
+/// <summary>Makes requests via the boost.beast library. This function decides on an http request or https request automatically.</summary>
+/// <param name="verb">The http verb</param>
+/// <param name="endpoint">URL to send request to</param>
+/// <param name="request_headers">(optional) Request headers to be sent as part of the request</param>
+/// <param name="request_body">(optional) Plain text body of the request</param>
+/// <param name="root_cert_path">(optional) The path to the base64 encoded root certificate for the endpoint. 
+/// This is used in ssl certificate verification</param>
+/// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
+/// <returns>Json representation of the response body</returns>
 json::value request(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
 {
     // determine if SSL is needed
@@ -281,6 +306,10 @@ json::value request(http::verb verb, std::string endpoint, std::map<std::string,
     );
 }
 
+/// <summary>Retrieves the bearer token used for OCS requests</summary>
+/// <param name="endpoint">Json endpoint object for determining what endpoint to retrieve the token for 
+/// and to store the token after it has been retrieved</param>
+/// <returns>Bearer token for OCS</returns>
 std::string getToken(json::object& endpoint)
 {
     if (endpoint["endpoint_type"] != TYPE_OCS)
@@ -332,6 +361,9 @@ std::string getToken(json::object& endpoint)
     return json::value_to<std::string>(endpoint.at("token"));
 }
 
+/// <summary>Compresses a request body using gzip compression</summary>
+/// <param name="request_body">Body of request to compress</param>
+/// <returns>Compressed request body</returns>
 std::string gzipCompress(std::string request_body)
 {
     std::stringstream compressed_body, origin(request_body);
@@ -344,6 +376,11 @@ std::string gzipCompress(std::string request_body)
     return compressed_body.str();
 }
 
+/// <summary>Sends OMF message to the specified endpoint</summary>
+/// <param name="endpoint">Json endpoint object for constructing request</param>
+/// <param name="message_type">The type of OMF message to send (type, container, data)</param>
+/// <param name="omf_message">String representation of OMF message</param>
+/// <param name="action">(optional) Action to take (i.e. create (default) or delete)</param>
 void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action)
 {
     // Compress json omf payload, if specified
@@ -397,6 +434,9 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     );
 }
 
+/// <summary>Retrieves a json file from the specified path</summary>
+/// <param name="path">Path to json file</param>
+/// <returns>Json representation of file</returns>
 json::value getJsonFile(std::string path)
 {
     json::value json_content;
@@ -419,6 +459,8 @@ json::value getJsonFile(std::string path)
     return json_content;
 }
 
+/// <summary>Retrieves the appsettings.json file</summary>
+/// <returns>Json representation of the appsettings file</returns>
 json::array getAppSettings()
 {
     // try to open the configuration file
@@ -466,6 +508,8 @@ json::array getAppSettings()
     return app_settings;
 }
 
+/// <summary>Retrieves ISO 8601 formatted date-time</summary>
+/// <returns>String representation of ISO 8601 date-time</returns>
 std::string getCurrentTime()
 {
     using namespace boost::posix_time;
@@ -473,6 +517,8 @@ std::string getCurrentTime()
     return to_iso_extended_string(current_time) + "Z";
 }
 
+/// <summary>Populates a data json object with data</summary>
+/// <param name = "data">Pointer to data object to populate with data</param>
 void getData(json::object& data)
 {
     std::string container_id = json::value_to<std::string>(data.at("containerid"));
@@ -506,6 +552,11 @@ void getData(json::object& data)
         std::cout << "Container " << container_id << " not recognized";
 }
 
+/// <summary>Main routine that is called in both main.cpp and test.cpp</summary>
+/// <param name="sent_data">A pointer to a json array that is used for storing the last values that were sent durring a test 
+/// These values are later used to verify that the test was successful</param>
+/// <param name = "test">(optional) Whether this function is being run as a test. By default this is false</param>.
+/// <returns>If the routine was successful</returns>
 bool omf_routine(json::array& sent_data, bool test)
 {
     // Step 1 - Read endpoint configurations from config.json
