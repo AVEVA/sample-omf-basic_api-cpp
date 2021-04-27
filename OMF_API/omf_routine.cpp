@@ -623,7 +623,7 @@ bool omf_routine(json::array& sent_data, bool test)
                 std::cout << omf_datum << std::endl;
             }
 
-            std::chrono::seconds timespan(1);
+            std::chrono::seconds timespan(SEND_DELAY);
             std::this_thread::sleep_for(timespan);
             count++;
         }

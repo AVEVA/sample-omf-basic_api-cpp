@@ -28,6 +28,7 @@
 #define TYPE_OCS "OCS"
 #define TYPE_EDS "EDS"
 #define TYPE_PI "PI"
+#define SEND_DELAY 1
 
 namespace beast = boost::beast;          // from <boost/beast.hpp>
 namespace http = beast::http;            // from <boost/beast/http.hpp>

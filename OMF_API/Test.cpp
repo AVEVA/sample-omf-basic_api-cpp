@@ -13,7 +13,6 @@ BOOST_AUTO_TEST_CASE(omf_routine_test)
 	// Steps 1 to 7 - Run the main program
     json::array sent_data;
 	BOOST_TEST(omf_routine(sent_data, true));
-    std::cout << sent_data << std::endl;
 	// Step 8 - Check Creations
     BOOST_TEST(check_creations(sent_data));
 	// Step 9 - Cleanup
