@@ -4,5 +4,5 @@
 int main()
 {
     json::array sent_data({});
-    omf_routine(sent_data);
+    omfRoutine(sent_data);
 }

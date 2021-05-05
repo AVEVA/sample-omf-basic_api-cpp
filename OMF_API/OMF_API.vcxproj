@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="appsettings.json" />
+    <None Include="appsettings.placeholder.json" />
     <None Include="OMF-Containers.json" />
     <None Include="OMF-Data.json" />
     <None Include="OMF-Types.json" />

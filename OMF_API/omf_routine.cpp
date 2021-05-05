@@ -10,7 +10,7 @@ bool value2 = false;
 /// <param name="request_body">(optional) Plain text body of the request</param>
 /// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
 /// <returns>Json representation of the response body</returns>
-json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::map<http::field, std::string> authentication)
+json::value httpRequest(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers, const std::string& request_body, const std::map<http::field, std::string>& authentication)
 {
     // parse endpoint
     std::vector<std::string> split_endpoint;
@@ -55,11 +55,15 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
     // Set headers and compress the request_body if applicable
+    bool compressed = false;
     for (auto const& x : request_headers)
     {
         req.set(x.first, x.second);
         if (x.first == "compression")
-            request_body = gzipCompress(request_body);
+        {
+            req.body() = gzipCompress(request_body);
+            compressed = true;
+        }
     }
 
     // Set authentication
@@ -67,7 +71,7 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
         req.set(x.first, x.second);
 
     // Set body if applicable
-    if (!request_body.empty())
+    if (!request_body.empty() && !compressed)
         req.body() = request_body;
 
     // Prepare the payload
@@ -82,16 +86,6 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     // Receive the HTTP response
     http::read(stream, buffer, res);
 
-    /*
-    // Gracefully close the stream (this can hand the thread)
-    beast::error_code ec;
-    stream.shutdown(ec);
-    if (ec == net::error::eof)
-        ec = {};
-    if (ec != boost::asio::ssl::error::stream_truncated)
-        throw beast::system_error{ ec };
-    */
-
     if (res.result() == http::int_to_status(409))
         return NULL;
 
@@ -99,6 +93,7 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
     if (res.result() < http::int_to_status(200) || res.result() >= http::int_to_status(300))
     {
         std::cout << "Response from relay was bad " << std::endl << res << std::endl;
+        std::cout << "Request " << std::endl << req << std::endl;
         throw http::error{};
     }
 
@@ -126,7 +121,7 @@ json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::str
 /// This is used in ssl certificate verification</param>
 /// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
 /// <returns>Json representation of the response body</returns>
-json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
+json::value httpsRequest(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers, const std::string& request_body, const std::string& root_cert_path, const std::map<http::field, std::string>& authentication)
 {
     // parse endpoint
     std::vector<std::string> split_endpoint;
@@ -205,11 +200,15 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
     // Set headers and compress the request_body if applicable
+    bool compressed = false;
     for (auto const& x : request_headers)
     {
         req.set(x.first, x.second);
         if (x.first == "compression")
-            request_body = gzipCompress(request_body);
+        {
+            req.body() = gzipCompress(request_body);
+            compressed = true;
+        }
     }
 
     // Set authentication
@@ -217,8 +216,8 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
         req.set(x.first, x.second);
 
     // Set body if applicable
-    if (!request_body.empty())
-        req.body() = request_body;
+    if (!request_body.empty() && !compressed)
+        req.body() = request_body.c_str();
 
     // Prepare the payload
     req.prepare_payload();
@@ -232,16 +231,6 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     // Receive the HTTP response
     http::read(stream, buffer, res);
 
-    /*
-    // Gracefully close the stream (this can hand the thread)
-    beast::error_code ec;
-    stream.shutdown(ec);
-    if (ec == net::error::eof)
-        ec = {};
-    if (ec != boost::asio::ssl::error::stream_truncated)
-        throw beast::system_error{ ec };
-    */
-
     if (res.result() == http::int_to_status(409))
         return NULL;
 
@@ -249,6 +238,7 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
     if (res.result() < http::int_to_status(200) || res.result() >= http::int_to_status(300))
     {
         std::cout << "Response from relay was bad " << std::endl << res << std::endl;
+        std::cout << "Request " << std::endl << req << std::endl;
         throw http::error{};
     }
 
@@ -276,7 +266,7 @@ json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::st
 /// This is used in ssl certificate verification</param>
 /// <param name="authentication">(optional) Authentication credentials used for basic authentication</param>
 /// <returns>Json representation of the response body</returns>
-json::value request(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers, std::string request_body, std::string root_cert_path, std::map<http::field, std::string> authentication)
+json::value request(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers, const std::string& request_body, const std::string& root_cert_path, const std::map<http::field, std::string>& authentication)
 {
     // determine if SSL is needed
     std::vector<std::string> split_endpoint;
@@ -312,19 +302,19 @@ json::value request(http::verb verb, std::string endpoint, std::map<std::string,
 /// <returns>Bearer token for OCS</returns>
 std::string getToken(json::object& endpoint)
 {
-    if (endpoint["endpoint_type"] != TYPE_OCS)
+    if (endpoint.at("EndpointType") != TYPE_OCS)
         return "";
 
     // check for an existing token and check that it is not expired
     auto time = std::chrono::system_clock::now().time_since_epoch();
     long long seconds = std::chrono::duration_cast<std::chrono::seconds>(time).count();
-    if (endpoint.contains("expiration") && (json::value_to<long long>(endpoint.at("expiration")) - seconds) > 5 * 60)
-        return json::value_to<std::string>(endpoint["token"]);
-
-    std::string client_secret = json::value_to<std::string>(endpoint.at("client_secret"));
-    std::string client_id = json::value_to<std::string>(endpoint.at("client_id"));
+    if (endpoint.contains("Expiration") && (json::value_to<long long>(endpoint.at("Expiration")) - seconds) > 5 * 60)
+        return json::value_to<std::string>(endpoint.at("Token"));
 
     // We can't short circuit it, so we must go retrieve the token
+
+    std::string ClientSecret = urlEncode(json::value_to<std::string>(endpoint.at("ClientSecret")));
+    std::string ClientId = urlEncode(json::value_to<std::string>(endpoint.at("ClientId")));
 
     // Get Token Endpoint
     std::string open_id_endpoint = "https://dat-b.osisoft.com/identity/.well-known/openid-configuration";
@@ -332,7 +322,7 @@ std::string getToken(json::object& endpoint)
 
     json::value response_body = {};
 
-    std::string certificate_path = json::value_to<std::string>(endpoint.at("verify_ssl"));
+    std::string certificate_path = json::value_to<std::string>(endpoint.at("VerifySSL"));
     response_body = httpsRequest(http::verb::get, open_id_endpoint, request_headers, "", certificate_path);
 
     std::string token_url = json::value_to<std::string>(response_body.at("token_endpoint"));
@@ -341,11 +331,11 @@ std::string getToken(json::object& endpoint)
     std::vector<std::string> split_token;
     boost::split(split_token, token_url, boost::is_any_of("/"));
     assert(split_token.at(0) == "https:");
-    assert(split_token.at(0) + "//" + split_token.at(2) == endpoint.at("resource").as_string());
+    assert(split_token.at(0) + "//" + split_token.at(2) == endpoint.at("Resource").as_string());
 
-    // Get the token endpoint
-    std::string request_body = "client_id=" + client_id +
-        "&client_secret=" + client_secret +
+    // Get the token
+    std::string request_body = "client_id=" + ClientId +
+        "&client_secret=" + ClientSecret +
         "&grant_type=client_credentials";
     request_headers = { {"Content-Type", "application/x-www-form-urlencoded",}, {"Accept", "*/*",} };
 
@@ -355,16 +345,16 @@ std::string getToken(json::object& endpoint)
     // store the token to save on unecessary calls
     time = std::chrono::system_clock::now().time_since_epoch();
     seconds = std::chrono::duration_cast<std::chrono::seconds>(time).count();
-    endpoint["expiration"] = json::value_to<long long>(token.at("expires_in")) + seconds;
-    endpoint["token"] = token.at("access_token");
+    endpoint["Expiration"] = json::value_to<long long>(token.at("expires_in")) + seconds;
+    endpoint["Token"] = token.at("access_token");
 
-    return json::value_to<std::string>(endpoint.at("token"));
+    return json::value_to<std::string>(endpoint.at("Token"));
 }
 
 /// <summary>Compresses a request body using gzip compression</summary>
 /// <param name="request_body">Body of request to compress</param>
 /// <returns>Compressed request body</returns>
-std::string gzipCompress(std::string request_body)
+std::string gzipCompress(const std::string& request_body)
 {
     std::stringstream compressed_body, origin(request_body);
 
@@ -376,16 +366,40 @@ std::string gzipCompress(std::string request_body)
     return compressed_body.str();
 }
 
+/// <summary>URL encodes a string</summary>
+/// <param name="body">string to url encode</param>
+/// <returns>Url encoded string</returns>
+std::string urlEncode(const std::string& body) {
+    std::stringstream escaped;
+    escaped.fill('0');
+    escaped << std::hex;
+
+    for (int i = 0; i < body.size(); i++) {
+        char ch = body.at(i);
+
+        if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
+            escaped << ch;
+        else
+        {
+            escaped << std::uppercase;
+            escaped << '%' << std::setw(2) << static_cast<int>(ch);
+            escaped << std::nouppercase;
+        }
+    }
+
+    return escaped.str();
+}
+
 /// <summary>Sends OMF message to the specified endpoint</summary>
 /// <param name="endpoint">Json endpoint object for constructing request</param>
 /// <param name="message_type">The type of OMF message to send (type, container, data)</param>
 /// <param name="omf_message">String representation of OMF message</param>
 /// <param name="action">(optional) Action to take (i.e. create (default) or delete)</param>
-void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action)
+void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message_type, const std::string& omf_message, const std::string& action)
 {
     // Compress json omf payload, if specified
     std::string compression = "none";
-    if (endpoint.at("use_compression").as_bool())
+    if (endpoint.at("UseCompression").as_bool())
         compression = "gzip";
 
     // Create message headers and authentication field
@@ -401,12 +415,12 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     if (compression == "gzip")
         request_headers.insert({ "compression", "gzip", });
 
-    if (endpoint.at("endpoint_type").as_string() == TYPE_OCS)
+    if (endpoint.at("EndpointType").as_string() == TYPE_OCS)
         request_headers.insert({ "Authorization", "Bearer " + getToken(endpoint) });
-    else if (endpoint.at("endpoint_type").as_string() == TYPE_PI)
+    else if (endpoint.at("EndpointType").as_string() == TYPE_PI)
     {
         request_headers.insert({ "x-requested-with", "xmlhttprequest", });
-        std::string credentials = json::value_to<std::string>(endpoint.at("username")) + ":" + json::value_to<std::string>(endpoint.at("password"));
+        std::string credentials = json::value_to<std::string>(endpoint.at("Username")) + ":" + json::value_to<std::string>(endpoint.at("Password"));
         std::string base64_encoded_credentials = "Basic " + base64::encode(credentials);
         authentication = { { http::field::authorization, base64_encoded_credentials, } };
     }
@@ -426,10 +440,10 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
     // Send message to OMF endpoint
     json::value response = request(
         http::verb::post,
-        json::value_to<std::string>(endpoint.at("omf_endpoint")),
+        json::value_to<std::string>(endpoint.at("OmfEndpoint")),
         validated_headers,
         omf_message,
-        json::value_to<std::string>(endpoint.at("verify_ssl")),
+        json::value_to<std::string>(endpoint.at("VerifySSL")),
         authentication
     );
 }
@@ -437,7 +451,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, 
 /// <summary>Retrieves a json file from the specified path</summary>
 /// <param name="path">Path to json file</param>
 /// <returns>Json representation of file</returns>
-json::value getJsonFile(std::string path)
+json::value getJsonFile(const std::string& path)
 {
     json::value json_content;
 
@@ -464,43 +478,43 @@ json::value getJsonFile(std::string path)
 json::array getAppSettings()
 {
     // try to open the configuration file
-    json::array app_settings = getJsonFile("appsettings.json").at("endpoints").as_array();
+    json::array app_settings = getJsonFile("appsettings.json").at("Endpoints").as_array();
 
     // for each endpoint construct the check base and OMF endpoint and populate default values
     for (int i = 0; i < app_settings.size(); i++)
     {
-        // add the base_endpoint and omf_endpoint to the endpoint configuration
+        // add the BaseEndpoint and OmfEndpoint to the endpoint configuration
         json::object endpoint = app_settings.at(i).get_object();
-        std::string type = json::value_to<std::string>(endpoint.at("endpoint_type"));
-        std::string resource = json::value_to<std::string>(endpoint.at("resource"));
+        std::string type = json::value_to<std::string>(endpoint.at("EndpointType"));
+        std::string Resource = json::value_to<std::string>(endpoint.at("Resource"));
 
         if (type == TYPE_OCS)
         {
-            std::string api_version = json::value_to<std::string>(endpoint.at("api_version"));
-            std::string tenant = json::value_to<std::string>(endpoint.at("tenant"));
-            std::string namespace_name = json::value_to<std::string>(endpoint.at("namespace_name"));
-            endpoint["base_endpoint"] = resource + "/api/" + api_version +
-                "/tenants/" + tenant + "/namespaces/" + namespace_name;
+            std::string ApiVersion = json::value_to<std::string>(endpoint.at("ApiVersion"));
+            std::string Tenant = json::value_to<std::string>(endpoint.at("Tenant"));
+            std::string NamespaceName = json::value_to<std::string>(endpoint.at("NamespaceName"));
+            endpoint["BaseEndpoint"] = Resource + "/api/" + ApiVersion +
+                "/Tenants/" + Tenant + "/namespaces/" + NamespaceName;
         }
         else if (type == TYPE_EDS)
         {
-            std::string api_version = json::value_to<std::string>(endpoint.at("api_version"));
-            endpoint["base_endpoint"] = resource + "/api/" + api_version +
-                "/tenants/default/namespaces/default";
+            std::string ApiVersion = json::value_to<std::string>(endpoint.at("ApiVersion"));
+            endpoint["BaseEndpoint"] = Resource + "/api/" + ApiVersion +
+                "/Tenants/default/namespaces/default";
         }
         else if (type == TYPE_PI)
         {
-            endpoint["base_endpoint"] = resource;
+            endpoint["BaseEndpoint"] = Resource;
         }
 
-        endpoint["omf_endpoint"] = json::value_to<std::string>(endpoint.at("base_endpoint")) + "/omf";
+        endpoint["OmfEndpoint"] = json::value_to<std::string>(endpoint.at("BaseEndpoint")) + "/omf";
 
         // check for optional/nullable parameters
-        if (!endpoint.contains("verify_ssl"))
-            endpoint["verify_ssl"] = "";
+        if (!endpoint.contains("VerifySSL"))
+            endpoint["VerifySSL"] = "";
 
-        if (!endpoint.contains("use_compression"))
-            endpoint["use_compression"] = false;
+        if (!endpoint.contains("UseCompression"))
+            endpoint["UseCompression"] = false;
 
         app_settings.at(i) = endpoint;
     }
@@ -526,12 +540,12 @@ void getData(json::object& data)
     json::array* values = &data.at("values").as_array();
     json::object* value = &values->at(0).as_object();
 
-    if (container_id == "Container1" || container_id == "Container2")
+    if (container_id == "FirstContainer" || container_id == "SecondContainer")
     {
         value->at("IntegerProperty") = rand() % 100;
         value->at("Timestamp") = getCurrentTime();
     }
-    else if (container_id == "Container3")
+    else if (container_id == "ThirdContainer")
     {
         value2 = !value2;
         value->at("Timestamp") = getCurrentTime();
@@ -542,7 +556,7 @@ void getData(json::object& data)
         else
             value->at("StringEnum") = "False";
     }
-    else if (container_id == "Container4")
+    else if (container_id == "FourthContainer")
     {
         value1 = !value1;
         value->at("Timestamp") = getCurrentTime();
@@ -557,7 +571,7 @@ void getData(json::object& data)
 /// These values are later used to verify that the test was successful</param>
 /// <param name = "test">(optional) Whether this function is being run as a test. By default this is false</param>.
 /// <returns>If the routine was successful</returns>
-bool omf_routine(json::array& sent_data, bool test)
+bool omfRoutine(json::array& sent_data, bool test)
 {
     // Step 1 - Read endpoint configurations from config.json
     json::array endpoints = getAppSettings();
@@ -578,7 +592,7 @@ bool omf_routine(json::array& sent_data, bool test)
         //Send out the messages that only need to be sent once
         for (auto& endpoint : endpoints)
         {
-            if (json::value_to<std::string>(endpoint.at("verify_ssl")) == "")
+            if (json::value_to<std::string>(endpoint.at("VerifySSL")) == "")
             {
                 std::cout << "You are not verifying the certificate of the end point. "
                     << "This is not advised for any system as there are security issues with doing this." << std::endl;

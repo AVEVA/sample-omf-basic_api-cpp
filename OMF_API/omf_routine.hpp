@@ -41,19 +41,21 @@ using base64 = cppcodec::base64_rfc4648; // from <cppcodec/base64_rfc4648.hpp>
 
 enum ENDPOINTS { OCS, EDS, PI };
 
-json::value httpRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::map<http::field, std::string> authentication = {});
+json::value httpRequest(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers = {}, const std::string& request_body = "", const std::map<http::field, std::string>& authentication = {});
 
-json::value httpsRequest(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::string root_cert_path = "", std::map<http::field, std::string> authentication = {});
+json::value httpsRequest(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers = {}, const std::string& request_body = "", const std::string& root_cert_path = "", const std::map<http::field, std::string>& authentication = {});
 
-json::value request(http::verb verb, std::string endpoint, std::map<std::string, std::string> request_headers = {}, std::string request_body = "", std::string root_cert_path = "", std::map<http::field, std::string> authentication = {});
+json::value request(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers = {}, const std::string& request_body = "", const std::string& root_cert_path = "", const std::map<http::field, std::string>& authentication = {});
 
 std::string getToken(json::object& endpoint);
 
-std::string gzipCompress(std::string request_body);
+std::string gzipCompress(const std::string& request_body);
 
-void sendMessageToOmfEndpoint(json::object& endpoint, std::string message_type, std::string omf_message, std::string action = "create");
+std::string urlEncode(const std::string& body);
 
-json::value getJsonFile(std::string path);
+void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message_type, const std::string& omf_message, const std::string& action = "create");
+
+json::value getJsonFile(const std::string& path);
 
 json::array getAppSettings();
 
@@ -61,6 +63,6 @@ std::string getCurrentTime();
 
 void getData(json::object& data);
 
-bool omf_routine(json::array& sent_data, bool test = false);
+bool omfRoutine(json::array& sent_data, bool test = false);
 
 #endif

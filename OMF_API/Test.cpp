@@ -4,22 +4,22 @@
 #include <boost/test/included/unit_test.hpp>
 
 bool cleanup();
-bool compare_pi_data(json::string container_name, json::object retrieved_data, json::array sent_data);
-bool compare_sds_data(json::string container_id, json::object retrieved_data, json::array sent_data);
-bool check_creations(json::array sent_data);
+bool comparePiData(json::string container_name, json::object retrieved_data, json::array sent_data);
+bool compareSdsData(json::string container_id, json::object retrieved_data, json::array sent_data);
+bool checkCreations(json::array sent_data);
 
 BOOST_AUTO_TEST_CASE(omf_routine_test)
 {
 	// Steps 1 to 7 - Run the main program
     json::array sent_data;
-	BOOST_TEST(omf_routine(sent_data, true));
+	BOOST_TEST(omfRoutine(sent_data, true));
 	// Step 8 - Check Creations
-    BOOST_TEST(check_creations(sent_data));
+    BOOST_TEST(checkCreations(sent_data));
 	// Step 9 - Cleanup
 	BOOST_TEST(cleanup());
 }
 
-bool check_creations(json::array sent_data)
+bool checkCreations(json::array sent_data)
 {
     bool success = true;
 
@@ -39,26 +39,26 @@ bool check_creations(json::array sent_data)
 
             // form request headers
             std::map<std::string, std::string> request_headers = { {"Accept-Verbosity", "verbose",} };
-            if (endpoint.at("endpoint_type").as_string() == TYPE_OCS)
+            if (endpoint.at("EndpointType").as_string() == TYPE_OCS)
                 request_headers.insert({ "Authorization", "Bearer " + getToken(endpoint.as_object()) });      
 
-            if (endpoint.at("endpoint_type").as_string() == TYPE_PI)
+            if (endpoint.at("EndpointType").as_string() == TYPE_PI)
             {
                 request_headers.insert({ "x-requested-with", "XMLHTTPRequest" });
-                std::string credentials = json::value_to<std::string>(endpoint.at("username")) + ":" + json::value_to<std::string>(endpoint.at("password"));
+                std::string credentials = json::value_to<std::string>(endpoint.at("Username")) + ":" + json::value_to<std::string>(endpoint.at("Password"));
                 std::string base64_encoded_credentials = "Basic " + base64::encode(credentials);
                 std::map<http::field, std::string> authentication = { { http::field::authorization, base64_encoded_credentials, } };
 
                 // get point URLs
-                std::string request_endpoint = json::value_to<std::string>(endpoint.at("base_endpoint")) +
-                    "/dataservers?name=" + json::value_to<std::string>(endpoint.at("data_server_name"));
+                std::string request_endpoint = json::value_to<std::string>(endpoint.at("BaseEndpoint")) +
+                    "/dataservers?name=" + json::value_to<std::string>(endpoint.at("DataServerName"));
 
                 response = httpsRequest(
                     http::verb::get,
                     request_endpoint,
                     request_headers,
                     "",
-                    json::value_to<std::string>(endpoint.at("verify_ssl")),
+                    json::value_to<std::string>(endpoint.at("VerifySSL")),
                     authentication
                 );
 
@@ -76,7 +76,7 @@ bool check_creations(json::array sent_data)
                         request_endpoint,
                         request_headers,
                         "",
-                        json::value_to<std::string>(endpoint.at("verify_ssl")),
+                        json::value_to<std::string>(endpoint.at("VerifySSL")),
                         authentication
                     );
 
@@ -94,12 +94,12 @@ bool check_creations(json::array sent_data)
                             end_value_URL,
                             request_headers,
                             "",
-                            json::value_to<std::string>(endpoint.at("verify_ssl")),
+                            json::value_to<std::string>(endpoint.at("VerifySSL")),
                             authentication
                         );
 
                         std::cout << item << std::endl;
-                        if (!compare_pi_data(item.at("Name").as_string(), response.as_object(), sent_data))
+                        if (!comparePiData(item.at("Name").as_string(), response.as_object(), sent_data))
                             success = false;
                     }
 
@@ -111,7 +111,7 @@ bool check_creations(json::array sent_data)
                 // retrieve types and check response
                 for (auto& omf_type : omf_types)
                 {
-                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("base_endpoint")) + 
+                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("BaseEndpoint")) + 
                         "/Types/" + json::value_to<std::string>(omf_type.at("id"));
 
                     response = request(
@@ -119,14 +119,14 @@ bool check_creations(json::array sent_data)
                         request_endpoint,
                         request_headers,
                         "",
-                        json::value_to<std::string>(endpoint.at("verify_ssl"))
+                        json::value_to<std::string>(endpoint.at("VerifySSL"))
                     );
                 }
                 
                 // retrieve containers and check response
                 for (auto& omf_container : omf_containers)
                 {
-                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("base_endpoint")) +
+                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("BaseEndpoint")) +
                         "/Streams/" + json::value_to<std::string>(omf_container.at("id"));
 
                     response = request(
@@ -134,14 +134,14 @@ bool check_creations(json::array sent_data)
                         request_endpoint,
                         request_headers,
                         "",
-                        json::value_to<std::string>(endpoint.at("verify_ssl"))
+                        json::value_to<std::string>(endpoint.at("VerifySSL"))
                     );
                 }
 
                 // retrieve the most recent data, check the response, and compare the data to what was sent
                 for (auto& omf_datum : omf_data)
                 {
-                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("base_endpoint")) +
+                    std::string request_endpoint = json::value_to<std::string>(endpoint.at("BaseEndpoint")) +
                         "/Streams/" + json::value_to<std::string>(omf_datum.at("containerid")) + "/Data/last";
 
                     response = request(
@@ -149,11 +149,11 @@ bool check_creations(json::array sent_data)
                         request_endpoint,
                         request_headers,
                         "",
-                        json::value_to<std::string>(endpoint.at("verify_ssl"))
+                        json::value_to<std::string>(endpoint.at("VerifySSL"))
                     );
 
                     // Check that the data retrieved matches what was sent
-                    if (!compare_sds_data(omf_datum.at("containerid").as_string(), response.as_object(), sent_data))
+                    if (!compareSdsData(omf_datum.at("containerid").as_string(), response.as_object(), sent_data))
                         success = false;
                 }
             }
@@ -202,7 +202,7 @@ bool cleanup()
 	return success;
 }
 
-bool compare_sds_data(json::string container_id, json::object retrieved_data, json::array sent_data)
+bool compareSdsData(json::string container_id, json::object retrieved_data, json::array sent_data)
 {
     for (auto& sent_datum : sent_data)
     {
@@ -220,7 +220,7 @@ bool compare_sds_data(json::string container_id, json::object retrieved_data, js
     return false;
 }
 
-bool compare_pi_data(json::string container_name, json::object retrieved_data, json::array sent_data)
+bool comparePiData(json::string container_name, json::object retrieved_data, json::array sent_data)
 {
     // split properties from tag name if the container had multiple properties
     std::vector<std::string> split_name;
