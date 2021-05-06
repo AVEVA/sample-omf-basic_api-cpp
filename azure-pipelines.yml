@@ -53,7 +53,6 @@ jobs:
         displayName: "Build Unit Test Application"
         inputs:
           command: 'build'
-          projects: '/OMF_API'
 
   - job: Analysis
     pool:
