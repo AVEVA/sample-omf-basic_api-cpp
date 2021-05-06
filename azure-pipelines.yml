@@ -49,6 +49,9 @@ jobs:
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
 
+      - script: vcpkg install boost cppcodec openssl
+          displayName: 'Install dependencies'
+
       - task: DotNetCoreCLI@2
         displayName: "Run tests"
         inputs:
@@ -66,9 +69,6 @@ jobs:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibraryOP)
           filePath: /OMF_API
-
-      - script: vcpkg install boost cppcodec openssl
-        displayName: 'Install dependencies'
 
       - task: DotNetCoreCLI@2
         displayName: "Run tests"
