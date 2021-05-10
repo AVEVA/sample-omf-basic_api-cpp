@@ -40,7 +40,7 @@ variables:
 jobs:
   - job: Tests_OCS
     pool:
-      name: 00-OSIManaged-Containers
+      name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
     steps:
       - template: "/miscellaneous/build_templates/config.yml@templates"
