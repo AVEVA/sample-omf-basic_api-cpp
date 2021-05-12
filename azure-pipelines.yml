@@ -61,8 +61,8 @@ jobs:
 
       - task: VSBuild@1
         inputs:
-          configuration: Debug UnitTests
-          platform: Win32
+          configuration: $(BuildConfiguration)
+          platform: $(BuildPlatform)
 
   - job: Analysis
     pool:
