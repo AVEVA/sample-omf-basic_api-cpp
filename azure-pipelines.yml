@@ -49,12 +49,17 @@ jobs:
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
 
+      - task: NuGetCommand@2
+        displayName: 'Restore Packages'
+        inputs:
+          command: 'restore'
+          feedsToUse: 'config'
+          nugetConfigPath: 'nuget.config'
+
       - task: DotNetCoreCLI@2
         displayName: "Build Unit Test Application"
         inputs:
           command: 'build'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
 
   - job: Analysis
     pool:
