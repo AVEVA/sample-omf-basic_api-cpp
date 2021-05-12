@@ -59,10 +59,10 @@ jobs:
           feedsToUse: 'config'
           nugetConfigPath: 'nuget.config'
 
-      - task: DotNetCoreCLI@2
-        displayName: "Build Unit Test Application"
+      - task: VSBuild@1
         inputs:
-          command: 'build'
+          configuration: Debug UnitTests
+          platform: Win32
 
   - job: Analysis
     pool:
