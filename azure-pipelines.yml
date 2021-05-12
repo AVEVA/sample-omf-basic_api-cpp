@@ -49,9 +49,6 @@ jobs:
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
 
-      - script: vcpkg integrate package
-        displayName: 'Integrate vcpkg with project'
-
       - task: DotNetCoreCLI@2
         displayName: "Restore Unit Test Application"
         inputs:
