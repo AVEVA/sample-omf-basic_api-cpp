@@ -53,8 +53,6 @@ jobs:
         displayName: 'Restore Packages'
         inputs:
           command: 'restore'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
 
       - task: DotNetCoreCLI@2
         displayName: "Build Unit Test Application"
