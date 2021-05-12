@@ -49,10 +49,12 @@ jobs:
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
 
-      - task: DotNetCoreCLI@2
-        displayName: "Restore Unit Test Application"
+      - task: NuGetCommand@2
+        displayName: 'Restore Packages'
         inputs:
           command: 'restore'
+          feedsToUse: 'config'
+          nugetConfigPath: 'nuget.config'
 
       - task: DotNetCoreCLI@2
         displayName: "Build Unit Test Application"
