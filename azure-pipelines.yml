@@ -77,9 +77,7 @@ jobs:
       - task: VSTest@2
         displayName: 'Test Assemblies'
         inputs:
-          testAssemblyVer2: |
-            **\$(BuildConfiguration)\*test*.dll
-            !**\obj\**
+          searchFolder: '$(System.DefaultWorkingDirectory)'
           codeCoverageEnabled: true
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
