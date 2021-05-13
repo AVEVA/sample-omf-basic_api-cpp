@@ -74,14 +74,15 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
           
-      - task: VSTest@2
-        displayName: 'Test Assemblies'
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
         inputs:
-          testAssemblyVer2: |
-            **\*test.dll
-            !**\*TestAdapter.dll
-            !**\obj\**
-          searchFolder: '$(System.DefaultWorkingDirectory)'
+          testResultsFiles: '**/test-*.xml'
+          failTaskOnFailedTests: true
+          testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
+          configuration: $(BuildConfiguration)
+          platform: $(BuildPlatform)
+        displayName: 'Publish test results'
 
   - job: Analysis
     pool:
