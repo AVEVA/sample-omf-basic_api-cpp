@@ -78,7 +78,7 @@ jobs:
         inputs:
           command: 'test'
           projects: '**/*.vcxproj'
-          arguments: '--no-build --configuration $(buildConfiguration)'
+          arguments: '--no-build --configuration $(BuildConfiguration)'
           publishTestResults: true
 
       - task: PublishTestResults@2
