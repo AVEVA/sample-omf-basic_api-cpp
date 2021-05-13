@@ -78,7 +78,7 @@ jobs:
         inputs:
           command: test
           projects: '**/OMF_API/*.vcxproj'
-          arguments: '--configuration "Debug UnitTests" --platform $(BuildPlatform)'
+          arguments: '--configuration "Debug UnitTests"'
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
