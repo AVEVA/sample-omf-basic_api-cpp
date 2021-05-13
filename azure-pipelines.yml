@@ -77,7 +77,7 @@ jobs:
       - task: DotNetCoreCLI@2
         inputs:
           command: 'test'
-          projects: '**/*.vcxproj'
+          projects: '*.sln'
           arguments: '--no-build --configuration "Debug UnitTests"'
           publishTestResults: true
 
