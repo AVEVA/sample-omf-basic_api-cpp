@@ -74,9 +74,15 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
           
-      - script: OMF_API.exe
-        workingDirectory: "$(Build.SourcesDirectory)/Debug UnitTests"
-        displayName: 'Run executable'
+      - task: VSTest@2
+        displayName: 'Test Assemblies'
+        inputs:
+          testAssemblyVer2: |
+            **\$(BuildConfiguration)\*test*.dll
+            !**\obj\**
+          codeCoverageEnabled: true
+          platform: '$(BuildPlatform)'
+          configuration: '$(BuildConfiguration)'
 
   - job: Analysis
     pool:
