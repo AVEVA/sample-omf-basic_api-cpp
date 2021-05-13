@@ -28,9 +28,13 @@ variables:
   - template: "/miscellaneous/build_templates/variables.yml@templates"
   - name: CredFile
     value: appsettings.json
-  - name: CredFileLibraryPI
+  - name: CertFile
+    value: cert.cer
+  - name: CredFileLibraryOCS
     value: product-readiness.omf-basic_api-dotnet.ocs.json
-  - name: CredFileLibraryOP
+  - name: RootCertificateOCS
+    value: product-readiness.omf-basic_api-dotnet.ocs.cer
+  - name: CredFileLibraryPI
     value: product-readiness.omf-basic_api-dotnet.pi.json
   - name: CredFileLibraryEDS
     value: product-readiness.omf-basic_api-dotnet.eds.json
@@ -46,7 +50,13 @@ jobs:
       - template: "/miscellaneous/build_templates/config.yml@templates"
         parameters:
           fileOriginal: $(CredFile)
-          fileLibrary: $(CredFileLibraryPI)
+          fileLibrary: $(CredFileLibraryOCS)
+          filePath: /OMF_API
+
+      - template: "/miscellaneous/build_templates/config.yml@templates"
+        parameters:
+          fileOriginal: $(CertFile)
+          fileLibrary: $(RootCertificateOCS)
           filePath: /OMF_API
 
       - script: vcpkg install boost boost-json boost-date-time cppcodec openssl
