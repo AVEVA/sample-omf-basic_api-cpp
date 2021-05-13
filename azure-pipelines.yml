@@ -80,6 +80,8 @@ jobs:
           searchFolder: '$(System.DefaultWorkingDirectory)'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
+          testAssemblyVer2: | 
+            **\OMF_API.exe
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
