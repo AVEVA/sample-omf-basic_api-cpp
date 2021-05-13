@@ -80,6 +80,7 @@ jobs:
           searchFolder: '$(System.DefaultWorkingDirectory)'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
+          tcmTestRun: 1
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
