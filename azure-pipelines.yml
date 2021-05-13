@@ -78,6 +78,8 @@ jobs:
         inputs:
           command: 'test'
           projects: '**/*.vcxproj'
+          arguments: '--no-build --configuration $(buildConfiguration)'
+          publishTestResults: true
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
