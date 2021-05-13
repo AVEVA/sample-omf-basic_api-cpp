@@ -63,6 +63,10 @@ jobs:
         inputs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
+          
+      - script: OMF_API.exe
+        workingDirectory: "$(Build.SourcesDirectory)/Debug UnitTests"
+        displayName: 'Run executable'
 
   - job: Analysis
     pool:
