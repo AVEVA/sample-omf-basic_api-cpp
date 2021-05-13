@@ -73,15 +73,11 @@ jobs:
         inputs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
-          
-      - task: VSTest@2
+
+      - task: DotNetCoreCLI@2
         inputs:
-          testSelector: 'testRun'
-          searchFolder: '$(System.DefaultWorkingDirectory)'
-          platform: '$(BuildPlatform)'
-          configuration: '$(BuildConfiguration)'
-          testAssemblyVer2: | 
-            **\OMF_API.exe
+          command: 'test'
+          projects: '$(System.DefaultWorkingDirectory)'
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
