@@ -74,11 +74,12 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
           
-      - task: DotNetCoreCLI@2
+      - task: VSTest@2
         inputs:
-          command: test
-          projects: '**/OMF_API/*.vcxproj'
-          arguments: '--configuration "Debug UnitTests"'
+          testSelector: 'testRun'
+          searchFolder: '$(System.DefaultWorkingDirectory)'
+          platform: '$(BuildPlatform)'
+          configuration: '$(BuildConfiguration)'
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
