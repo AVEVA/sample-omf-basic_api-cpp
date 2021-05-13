@@ -31,13 +31,13 @@ variables:
   - name: CertFile
     value: cert.cer
   - name: CredFileLibraryOCS
-    value: product-readiness.omf-basic_api-dotnet.ocs.json
+    value: product-readiness.omf-basic_api-cpp.ocs.json
   - name: RootCertificateOCS
-    value: product-readiness.omf-basic_api-dotnet.ocs.cer
+    value: product-readiness.omf-basic_api-cpp.ocs.cer
   - name: CredFileLibraryPI
-    value: product-readiness.omf-basic_api-dotnet.pi.json
+    value: product-readiness.omf-basic_api-cpp.pi.json
   - name: CredFileLibraryEDS
-    value: product-readiness.omf-basic_api-dotnet.eds.json
+    value: product-readiness.omf-basic_api-cpp.eds.json
   - name: analysisProject
     value: OMF_API_CPP
 
