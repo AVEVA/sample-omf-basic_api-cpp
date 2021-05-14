@@ -95,14 +95,17 @@ jobs:
 
       - task: VSTest@2
         inputs:
+          testSelector: 'testAssemblies'
           testAssemblyVer2: '**\*.exe'
           searchFolder: '$(System.DefaultWorkingDirectory)'
+          vsTestVersion: '16.0'
           pathtoCustomTestAdapters: '$(BoostTestAdapterLocation)'
+          runTestsInIsolation: true
           otherConsoleOptions: '/Platform:x86'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
           failOnMinTestsNotRun: true
-          minimumExpectedTests: 1
+          diagnosticsEnabled: true
         condition: succeededOrFailed()
 
       - task: PublishTestResults@2
