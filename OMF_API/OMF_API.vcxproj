@@ -28,11 +28,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="appsettings.json" />
+    <None Include="appsettings.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="appsettings.placeholder.json" />
-    <None Include="OMF-Containers.json" />
-    <None Include="OMF-Data.json" />
-    <None Include="OMF-Types.json" />
+    <None Include="OMF-Containers.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="OMF-Data.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="OMF-Types.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
