@@ -169,7 +169,7 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
         }
         catch (std::exception const& e)
         {
-            std::cerr << "Unable to open or parse file: "
+            std::cerr << "Unable to open or parse file at path " << path << ": "
                 << e.what() << std::endl;
             return EXIT_FAILURE;
         }
@@ -465,7 +465,7 @@ json::value getJsonFile(const std::string& path)
     }
     catch (std::exception const& e)
     {
-        std::cerr << "Unable to open or parse file: "
+        std::cerr << "Unable to open or parse file at path " << path << ": "
             << e.what() << std::endl;
         return EXIT_FAILURE;
     }
