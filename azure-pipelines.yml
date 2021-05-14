@@ -104,6 +104,7 @@ jobs:
           configuration: '$(BuildConfiguration)'
           failOnMinTestsNotRun: true
           diagnosticsEnabled: true
+          rerunFailedTests: true
         condition: succeededOrFailed()
 
       - task: PublishTestResults@2
