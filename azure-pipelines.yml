@@ -107,16 +107,6 @@ jobs:
           rerunFailedTests: true
         condition: succeededOrFailed()
 
-      - task: PublishTestResults@2
-        condition: succeededOrFailed()
-        inputs:
-          testResultsFiles: '**/test-*.xml'
-          failTaskOnFailedTests: true
-          testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
-          configuration: $(BuildConfiguration)
-          platform: $(BuildPlatform)
-        displayName: 'Publish test results'
-
   - job: Analysis
     pool:
       name: 00-OSIManaged-Containers
