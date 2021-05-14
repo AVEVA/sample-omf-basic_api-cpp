@@ -53,12 +53,6 @@ jobs:
           fileLibrary: $(CredFileLibraryOCS)
           filePath: /OMF_API
 
-      - template: "/miscellaneous/build_templates/config.yml@templates"
-        parameters:
-          fileOriginal: $(CertFile)
-          fileLibrary: $(RootCertificateOCS)
-          filePath: /OMF_API
-
       - script: vcpkg install boost boost-json boost-date-time cppcodec openssl
         displayName: 'Install dependencies'
 
@@ -73,6 +67,12 @@ jobs:
         inputs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
+      
+      - template: "/miscellaneous/build_templates/config.yml@templates"
+        parameters:
+          fileOriginal: $(CertFile)
+          fileLibrary: $(RootCertificateOCS)
+          filePath: '/Debug UnitTests'
 
       - task: PowerShell@1
         displayName: 'Load boost test adapter location'
