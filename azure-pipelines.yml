@@ -130,6 +130,25 @@ jobs:
         inputs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
+      
+      - task: PowerShell@1
+        displayName: 'Load boost test adapter location'
+        inputs:
+          scriptType: inlineScript
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          inlineScript: |
+            Param(
+                [string]$VisualStudioLocation
+            )
+            
+            $boostTestAdapter = Get-ChildItem -Recurse -Filter "boosttestadapter.dll" -Path $VisualStudioLocation
+            $testAdapterDir = $boostTestAdapter.Directory.FullName
+            if(-not(Test-Path $testAdapterDir))
+            {
+                Write-Error "Boost test adapter not found!"
+            }
+            Write-Host "Boost test adapter location: $testAdapterDir"
+            Write-Host "##vso[task.setvariable variable=BoostTestAdapterLocation]$testAdapterDir"
 
       - task: VSTest@2
         inputs:
