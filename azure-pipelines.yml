@@ -107,6 +107,44 @@ jobs:
           rerunFailedTests: true
         condition: succeededOrFailed()
 
+  - job: Tests_EDS
+    dependsOn: Tests_OCS
+    pool:
+      name: 00-OSIManaged-Test
+      demands: COMPUTERNAME -equals $(buildAgent)
+    steps:
+      - template: "/miscellaneous/build_templates/config.yml@templates"
+        parameters:
+          fileOriginal: $(CredFile)
+          fileLibrary: $(CredFileLibraryEDS)
+          filePath: /OMF_API
+
+      - task: NuGetCommand@2
+        displayName: 'Restore Packages'
+        inputs:
+          command: 'restore'
+          feedsToUse: 'config'
+          nugetConfigPath: 'nuget.config'
+          
+      - task: VSBuild@1
+        inputs:
+          configuration: $(BuildConfiguration)
+          platform: $(BuildPlatform)
+
+      - task: VSTest@2
+        inputs:
+          testAssemblyVer2: '**\*.exe'
+          searchFolder: '$(System.DefaultWorkingDirectory)'
+          vsTestVersion: 'Latest'
+          pathtoCustomTestAdapters: '$(BoostTestAdapterLocation)'
+          otherConsoleOptions: '/Platform:x86'
+          platform: '$(BuildPlatform)'
+          configuration: '$(BuildConfiguration)'
+          failOnMinTestsNotRun: true
+          diagnosticsEnabled: true
+          rerunFailedTests: true
+        condition: succeededOrFailed()
+
   - job: Analysis
     pool:
       name: 00-OSIManaged-Containers
