@@ -99,7 +99,6 @@ jobs:
           searchFolder: '$(System.DefaultWorkingDirectory)'
           vsTestVersion: '16.0'
           pathtoCustomTestAdapters: '$(BoostTestAdapterLocation)'
-          runTestsInIsolation: true
           otherConsoleOptions: '/Platform:x86'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
