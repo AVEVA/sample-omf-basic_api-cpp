@@ -79,6 +79,9 @@ jobs:
           testAssemblyVer2: '**\*.exe'
           searchFolder: '$(System.DefaultWorkingDirectory)'
           pathtoCustomTestAdapters: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\1pjlmcay.esi'
+          otherConsoleOptions: '/Platform:x86'
+          platform: '$(BuildPlatform)'
+          configuration: '$(BuildConfiguration)'
           failOnMinTestsNotRun: true
           minimumExpectedTests: 1
         condition: succeededOrFailed()
