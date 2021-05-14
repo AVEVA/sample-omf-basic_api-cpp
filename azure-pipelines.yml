@@ -77,7 +77,6 @@ jobs:
       - task: DotNetCoreCLI@2
         inputs:
           command: 'test'
-          projects: '**\*Test.cpp'
           arguments: '--no-build --configuration "Debug UnitTests"'
           publishTestResults: true
 
