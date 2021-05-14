@@ -97,7 +97,7 @@ jobs:
         inputs:
           testAssemblyVer2: '**\*.exe'
           searchFolder: '$(System.DefaultWorkingDirectory)'
-          vsTestVersion: '16.0'
+          vsTestVersion: 'Latest'
           pathtoCustomTestAdapters: '$(BoostTestAdapterLocation)'
           otherConsoleOptions: '/Platform:x86'
           platform: '$(BuildPlatform)'
