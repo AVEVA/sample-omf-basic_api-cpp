@@ -74,11 +74,14 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
 
-      - task: DotNetCoreCLI@2
+      - task: VSTest@2
         inputs:
-          command: 'test'
-          arguments: '--no-build --configuration "Debug UnitTests"'
-          publishTestResults: true
+          testAssemblyVer2: '**\*.exe'
+          searchFolder: '$(System.DefaultWorkingDirectory)'
+          pathtoCustomTestAdapters: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\1pjlmcay.esi'
+          failOnMinTestsNotRun: true
+          minimumExpectedTests: 1
+        condition: succeededOrFailed()
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
