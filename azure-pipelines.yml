@@ -74,9 +74,9 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
       
-      - task: Delay@1
+      - task: PowerShell@1
         inputs:
-          delayForMinutes: '1'
+          inlineScript: Start-Sleep -Seconds 60
 
       - task: PowerShell@1
         displayName: 'Load boost test adapter location'
