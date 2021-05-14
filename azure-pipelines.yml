@@ -68,11 +68,6 @@ jobs:
           command: 'restore'
           feedsToUse: 'config'
           nugetConfigPath: 'nuget.config'
-
-      - task: VSBuild@1
-        inputs:
-          configuration: $(BuildConfiguration)
-          platform: $(BuildPlatform)
       
       - task: PowerShell@1
         displayName: 'Load boost test adapter location'
