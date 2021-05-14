@@ -95,7 +95,6 @@ jobs:
 
       - task: VSTest@2
         inputs:
-          testSelector: 'testAssemblies'
           testAssemblyVer2: '**\*.exe'
           searchFolder: '$(System.DefaultWorkingDirectory)'
           vsTestVersion: '16.0'
