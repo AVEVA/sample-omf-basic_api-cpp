@@ -40,13 +40,13 @@
     <Text Include="OMF-Data.json">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="OMF-Types.json">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="appsettings.json">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="appsettings.placeholder.json">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="OMF-Types.json">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
