@@ -182,14 +182,14 @@ bool cleanup()
     {
         try
         {
-            for (auto& omf_type : omf_types)
-            {
-                sendMessageToOmfEndpoint(endpoint.as_object(), "type", "[" + json::serialize(omf_type) + "]", "delete");
-            }
-
             for (auto& omf_container : omf_containers)
             {
                 sendMessageToOmfEndpoint(endpoint.as_object(), "container", "[" + json::serialize(omf_container) + "]", "delete");
+            }
+
+            for (auto& omf_type : omf_types)
+            {
+                sendMessageToOmfEndpoint(endpoint.as_object(), "type", "[" + json::serialize(omf_type) + "]", "delete");
             }
         }
         catch (std::exception const& e)
