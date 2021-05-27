@@ -16,21 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="OMF-Containers.json">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="OMF-Data.json">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="OMF-Types.json">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="appsettings.json">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="appsettings.placeholder.json">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,5 +32,22 @@
     <ClInclude Include="omf_routine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="OMF-Containers.json">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="OMF-Data.json">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="OMF-Types.json">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="appsettings.json">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="appsettings.placeholder.json">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
