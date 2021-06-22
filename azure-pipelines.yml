@@ -221,3 +221,21 @@ jobs:
           rerunFailedTests: true
         condition: succeededOrFailed()
 
+  - job: Analysis
+    pool:
+      name: 00-OSIManaged-Test
+      demands: COMPUTERNAME -equals $(buildAgent)
+    steps:
+      - task: NuGetCommand@2
+        displayName: 'Restore Packages'
+        inputs:
+          command: 'restore'
+          feedsToUse: 'config'
+          nugetConfigPath: 'nuget.config'
+          
+      - task: VSBuild@1
+        inputs:
+          configuration: $(BuildConfiguration)
+          platform: $(BuildPlatform)
+
+      - template: '/miscellaneous/build_templates/analysis.yml@templates'
