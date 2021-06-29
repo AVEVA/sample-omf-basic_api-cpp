@@ -17,6 +17,8 @@ capture:
     buildCommands:
       - shell: ['vsdevcmd', '&', 'msbuild']
     coverity: 
-      skipFiles: ["/vcpkg/*", "/Program Files (x86)/*"] 
+      skipFiles:
+        - "/vcpkg/*"
+        - "/Program Files (x86)/*" 
 analyze:
   mode: central
