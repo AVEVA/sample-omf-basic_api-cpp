@@ -238,10 +238,5 @@ jobs:
           command: 'restore'
           feedsToUse: 'config'
           nugetConfigPath: 'nuget.config'
-          
-      - task: VSBuild@1
-        inputs:
-          configuration: $(BuildConfiguration)
-          platform: $(BuildPlatform)
 
       - template: '/miscellaneous/build_templates/analysis.yml@templates'
