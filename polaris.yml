@@ -11,10 +11,12 @@ project:
     name: ${scm.git.commit}
     date: ${scm.git.commit.date}
 capture:
-  coverity:
-    buildless:
-      project:
-        languages:
-          - C++
+  build:
+    cleanCommands:
+      - shell: ['vsdevcmd', '&', 'msbuild', '-t:clean']
+    buildCommands:
+      - shell: ['vsdevcmd', '&', 'msbuild']
+    coverity: 
+      skipFiles: ["vcpkg/*", "Program Files (x86)/*"] 
 analyze:
   mode: central
