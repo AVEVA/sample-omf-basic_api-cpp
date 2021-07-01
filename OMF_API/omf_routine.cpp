@@ -84,9 +84,9 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
     beast::flat_buffer buffer;
 
     // Receive the HTTP response
-    http::read(stream, buffer, res);
+    std::size_t read_size = http::read(stream, buffer, res);
 
-    if (res.result() == http::int_to_status(409))
+    if (read_size == 0 || res.result() == http::int_to_status(409))
         return NULL;
 
     // response code in 200s if the request was successful!
@@ -570,8 +570,8 @@ void getData(json::object& data)
     {
         value2 = !value2;
         value->at("Timestamp") = getCurrentTime();
-        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
-        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
+        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
+        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
         if (value2)
             value->at("StringEnum") = "True";
         else
