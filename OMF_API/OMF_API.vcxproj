@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug UnitTests|Win32">
       <Configuration>Debug UnitTests</Configuration>
@@ -289,13 +288,24 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" />
+    <Import Project="..\packages\boost.1.76.0.0\build\boost.targets" Condition="Exists('..\packages\boost.1.76.0.0\build\boost.targets')" />
+    <Import Project="..\packages\boost_json-vc142.1.76.0.0\build\boost_json-vc142.targets" Condition="Exists('..\packages\boost_json-vc142.1.76.0.0\build\boost_json-vc142.targets')" />
+    <Import Project="..\packages\boost_date_time-vc142.1.76.0.0\build\boost_date_time-vc142.targets" Condition="Exists('..\packages\boost_date_time-vc142.1.76.0.0\build\boost_date_time-vc142.targets')" />
+    <Import Project="..\packages\boost_container-vc142.1.76.0.0\build\boost_container-vc142.targets" Condition="Exists('..\packages\boost_container-vc142.1.76.0.0\build\boost_container-vc142.targets')" />
+    <Import Project="..\packages\boost_iostreams-vc142.1.76.0.0\build\boost_iostreams-vc142.targets" Condition="Exists('..\packages\boost_iostreams-vc142.1.76.0.0\build\boost_iostreams-vc142.targets')" />
+    <Import Project="..\packages\boost_zlib-vc142.1.76.0.0\build\boost_zlib-vc142.targets" Condition="Exists('..\packages\boost_zlib-vc142.1.76.0.0\build\boost_zlib-vc142.targets')" />
+    <Import Project="..\packages\openssl-vc142.1.1.0\build\native\openssl-vc142.targets" Condition="Exists('..\packages\openssl-vc142.1.1.0\build\native\openssl-vc142.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props'))" />
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.76.0.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.76.0.0\build\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_json-vc142.1.76.0.0\build\boost_json-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_json-vc142.1.76.0.0\build\boost_json-vc142.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_date_time-vc142.1.76.0.0\build\boost_date_time-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_date_time-vc142.1.76.0.0\build\boost_date_time-vc142.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_container-vc142.1.76.0.0\build\boost_container-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_container-vc142.1.76.0.0\build\boost_container-vc142.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_iostreams-vc142.1.76.0.0\build\boost_iostreams-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_iostreams-vc142.1.76.0.0\build\boost_iostreams-vc142.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_zlib-vc142.1.76.0.0\build\boost_zlib-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_zlib-vc142.1.76.0.0\build\boost_zlib-vc142.targets'))" />
+    <Error Condition="!Exists('..\packages\openssl-vc142.1.1.0\build\native\openssl-vc142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\openssl-vc142.1.1.0\build\native\openssl-vc142.targets'))" />
   </Target>
 </Project>

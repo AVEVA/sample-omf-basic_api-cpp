@@ -3,6 +3,6 @@
 
 int main()
 {
-    json::array sent_data({});
+    json::array sent_data;
     omfRoutine(sent_data);
 }

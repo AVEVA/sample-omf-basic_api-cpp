@@ -12,7 +12,7 @@
 #include <boost/asio/ssl/stream.hpp>
 #include <boost/json.hpp>
 #include <boost/algorithm/string.hpp>
-#include <cppcodec/base64_rfc4648.hpp>
+//#include <cppcodec/base64_rfc4648.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -37,7 +37,7 @@ namespace ssl = net::ssl;                // from <boost/asio/ssl.hpp>
 namespace json = boost::json;            // from <boost/json.hpp>
 namespace ios = boost::iostreams;        // from <boost/iostreams>
 using tcp = net::ip::tcp;                // from <boost/asio/ip/tcp.hpp>
-using base64 = cppcodec::base64_rfc4648; // from <cppcodec/base64_rfc4648.hpp>
+//using base64 = cppcodec::base64_rfc4648; // from <cppcodec/base64_rfc4648.hpp>
 
 enum ENDPOINTS { OCS, EDS, PI };
 
@@ -52,6 +52,8 @@ std::string getToken(json::object& endpoint);
 std::string gzipCompress(const std::string& request_body);
 
 std::string urlEncode(const std::string& body);
+
+std::string base64_encode(const std::string& body);
 
 void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message_type, const std::string& omf_message, const std::string& action = "create");
 

@@ -390,6 +390,27 @@ std::string urlEncode(const std::string& body) {
     return escaped.str();
 }
 
+/// <summary>Base64 encodes a string</summary>
+/// <param name="body">string to base64 encode</param>
+/// <returns>Url encoded string</returns>
+std::string base64_encode(const std::string& body) {
+
+    std::string out;
+
+    int val = 0, valb = -6;
+    for (unsigned char c : body) {
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0) {
+            out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+    if (valb > -6) out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val << 8) >> (valb + 8)) & 0x3F]);
+    while (out.size() % 4) out.push_back('=');
+    return out;
+}
+
 /// <summary>Sends OMF message to the specified endpoint</summary>
 /// <param name="endpoint">Json endpoint object for constructing request</param>
 /// <param name="message_type">The type of OMF message to send (type, container, data)</param>
@@ -421,7 +442,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message
     {
         request_headers.insert({ "x-requested-with", "xmlhttprequest", });
         std::string credentials = json::value_to<std::string>(endpoint.at("Username")) + ":" + json::value_to<std::string>(endpoint.at("Password"));
-        std::string base64_encoded_credentials = "Basic " + base64::encode(credentials);
+        std::string base64_encoded_credentials = "Basic " + base64_encode(credentials);
         authentication = { { http::field::authorization, base64_encoded_credentials, } };
     }
 

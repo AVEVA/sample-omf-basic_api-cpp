@@ -1,4 +1,3 @@
-#include <boost/json/src.hpp>
 #include "omf_routine.hpp"
 #define BOOST_TEST_MODULE tests
 #include <boost/test/included/unit_test.hpp>
@@ -46,7 +45,7 @@ bool checkCreations(json::array sent_data)
             {
                 request_headers.insert({ "x-requested-with", "XMLHTTPRequest" });
                 std::string credentials = json::value_to<std::string>(endpoint.at("Username")) + ":" + json::value_to<std::string>(endpoint.at("Password"));
-                std::string base64_encoded_credentials = "Basic " + base64::encode(credentials);
+                std::string base64_encoded_credentials = "Basic " + base64_encode(credentials);
                 std::map<http::field, std::string> authentication = { { http::field::authorization, base64_encoded_credentials, } };
 
                 // get point URLs
