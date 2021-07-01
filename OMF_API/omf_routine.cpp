@@ -29,7 +29,7 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
 
     // parse path
     std::string path = "";
-    for (int i = 3; i < split_endpoint.size(); i++)
+    for (uint8_t i = 3; i < split_endpoint.size(); i++)
         path += "/" + split_endpoint.at(i);
 
     // The io_context is required for all I/O
@@ -140,7 +140,7 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
 
     // parse path
     std::string path = "";
-    for (int i = 3; i < split_endpoint.size(); i++)
+    for (uint8_t i = 3; i < split_endpoint.size(); i++)
         path += "/" + split_endpoint.at(i);
 
     // The io_context is required for all I/O
@@ -374,7 +374,7 @@ std::string urlEncode(const std::string& body) {
     escaped.fill('0');
     escaped << std::hex;
 
-    for (int i = 0; i < body.size(); i++) {
+    for (uint32_t i = 0; i < body.size(); i++) {
         char ch = body.at(i);
 
         if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
@@ -502,7 +502,7 @@ json::array getAppSettings()
     json::array app_settings = getJsonFile("appsettings.json").at("Endpoints").as_array();
 
     // for each endpoint construct the check base and OMF endpoint and populate default values
-    for (int i = 0; i < app_settings.size(); i++)
+    for (uint8_t i = 0; i < app_settings.size(); i++)
     {
         // add the BaseEndpoint and OmfEndpoint to the endpoint configuration
         json::object endpoint = app_settings.at(i).get_object();
