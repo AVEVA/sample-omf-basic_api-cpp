@@ -44,8 +44,8 @@ variables:
 jobs:
   - job: Tests_OCS
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: 00-OSIManaged-Containers
+      demands: Agent.OS -equals Linux
     steps:
       - template: "/miscellaneous/build_templates/config.yml@templates"
         parameters:
@@ -105,7 +105,6 @@ jobs:
         condition: succeededOrFailed()
 
   - job: Tests_PI
-    dependsOn: Tests_OCS
     pool:
       name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
@@ -162,7 +161,6 @@ jobs:
         condition: succeededOrFailed()
   
   - job: Tests_EDS
-    dependsOn: Tests_PI
     pool:
       name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
@@ -220,8 +218,8 @@ jobs:
 
   - job: Analysis
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: 00-OSIManaged-Containers
+      demands: Agent.OS -equals Windows_NT
     steps:
       - template: "/miscellaneous/build_templates/config.yml@templates"
         parameters:
