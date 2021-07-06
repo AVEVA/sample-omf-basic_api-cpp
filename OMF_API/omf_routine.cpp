@@ -108,7 +108,6 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
         res_body = res_body.erase(0, 3);
 
     // Parse the response body as json
-    std::cout << res_body << std::endl;
     return json::parse(res_body);
 }
 
@@ -253,7 +252,6 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
         res_body = res_body.erase(0, 3);
 
     // Parse the response body as json
-    std::cout << res_body << std::endl;
     return json::parse(res_body);
 }
 
