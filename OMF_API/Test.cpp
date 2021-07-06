@@ -1,5 +1,5 @@
 #include "omf_routine.hpp"
-#define BOOST_TEST_MODULE tests
+#define BOOST_TEST_MODULE Test
 #include <boost/test/included/unit_test.hpp>
 
 bool cleanup();

@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OMF_API", "OMF_API\OMF_API.vcxproj", "{1A58F264-7308-4A32-8CB1-D3F215E1546E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{31C08C86-9DE2-4EDB-8B89-1ABBDEFE497D}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		HISTORY.md = HISTORY.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug UnitTests|x64 = Debug UnitTests|x64
