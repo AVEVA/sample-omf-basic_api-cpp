@@ -52,13 +52,6 @@ jobs:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibraryOCS)
           filePath: /OMF_API
-
-      - task: NuGetCommand@2
-        displayName: 'Restore Packages'
-        inputs:
-          command: 'restore'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
           
       - task: VSBuild@1
         inputs:
@@ -115,13 +108,6 @@ jobs:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
-
-      - task: NuGetCommand@2
-        displayName: 'Restore Packages'
-        inputs:
-          command: 'restore'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
           
       - task: VSBuild@1
         inputs:
@@ -172,13 +158,6 @@ jobs:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibraryEDS)
           filePath: /OMF_API
-
-      - task: NuGetCommand@2
-        displayName: 'Restore Packages'
-        inputs:
-          command: 'restore'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
           
       - task: VSBuild@1
         inputs:
@@ -228,12 +207,5 @@ jobs:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibraryPI)
           filePath: /OMF_API
-          
-      - task: NuGetCommand@2
-        displayName: 'Restore Packages'
-        inputs:
-          command: 'restore'
-          feedsToUse: 'config'
-          nugetConfigPath: 'nuget.config'
 
       - template: '/miscellaneous/build_templates/analysis.yml@templates'
