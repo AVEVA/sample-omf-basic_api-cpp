@@ -13,9 +13,7 @@ This sample doesn't use any help to build the JSON strings for the OMF messages.
 [OMF documentation](https://omf-docs.osisoft.com/)
 
 ## Prerequisites
-1. Install Visual Studio with C++ support. See [Install C and C++ support in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
-2. Install vcpkg and itegrate with Visual Studio. See [Integrate vcpkg with Visual Studio or Visual Studio Code](https://docs.microsoft.com/en-us/cpp/build/integrate-vcpkg?view=msvc-160)
-3. Install required libraries (ports) using vcpkg install
+Install Visual Studio with C++ support. See [Install C and C++ support in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
 
 ## To Run this Sample in Visual Studio:
 
