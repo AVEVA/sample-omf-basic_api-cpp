@@ -29,7 +29,7 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
 
     // parse path
     std::string path = "";
-    for (int i = 3; i < split_endpoint.size(); i++)
+    for (uint8_t i = 3; i < split_endpoint.size(); i++)
         path += "/" + split_endpoint.at(i);
 
     // The io_context is required for all I/O
@@ -84,9 +84,9 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
     beast::flat_buffer buffer;
 
     // Receive the HTTP response
-    http::read(stream, buffer, res);
+    std::size_t read_size = http::read(stream, buffer, res);
 
-    if (res.result() == http::int_to_status(409))
+    if (read_size == 0 || res.result() == http::int_to_status(409))
         return NULL;
 
     // response code in 200s if the request was successful!
@@ -108,7 +108,6 @@ json::value httpRequest(http::verb verb, const std::string& endpoint, const std:
         res_body = res_body.erase(0, 3);
 
     // Parse the response body as json
-    std::cout << res_body << std::endl;
     return json::parse(res_body);
 }
 
@@ -140,7 +139,7 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
 
     // parse path
     std::string path = "";
-    for (int i = 3; i < split_endpoint.size(); i++)
+    for (uint8_t i = 3; i < split_endpoint.size(); i++)
         path += "/" + split_endpoint.at(i);
 
     // The io_context is required for all I/O
@@ -229,9 +228,9 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
     beast::flat_buffer buffer;
 
     // Receive the HTTP response
-    http::read(stream, buffer, res);
+    std::size_t read_size = http::read(stream, buffer, res);
 
-    if (res.result() == http::int_to_status(409))
+    if (read_size == 0 || res.result() == http::int_to_status(409))
         return NULL;
 
     // response code in 200s if the request was successful!
@@ -253,7 +252,6 @@ json::value httpsRequest(http::verb verb, const std::string& endpoint, const std
         res_body = res_body.erase(0, 3);
 
     // Parse the response body as json
-    std::cout << res_body << std::endl;
     return json::parse(res_body);
 }
 
@@ -374,7 +372,7 @@ std::string urlEncode(const std::string& body) {
     escaped.fill('0');
     escaped << std::hex;
 
-    for (int i = 0; i < body.size(); i++) {
+    for (uint32_t i = 0; i < body.size(); i++) {
         char ch = body.at(i);
 
         if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
@@ -388,6 +386,27 @@ std::string urlEncode(const std::string& body) {
     }
 
     return escaped.str();
+}
+
+/// <summary>Base64 encodes a string</summary>
+/// <param name="body">string to base64 encode</param>
+/// <returns>Url encoded string</returns>
+std::string base64_encode(const std::string& body) {
+
+    std::string out;
+
+    int val = 0, valb = -6;
+    for (unsigned char c : body) {
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0) {
+            out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+    if (valb > -6) out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val << 8) >> (valb + 8)) & 0x3F]);
+    while (out.size() % 4) out.push_back('=');
+    return out;
 }
 
 /// <summary>Sends OMF message to the specified endpoint</summary>
@@ -421,7 +440,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message
     {
         request_headers.insert({ "x-requested-with", "xmlhttprequest", });
         std::string credentials = json::value_to<std::string>(endpoint.at("Username")) + ":" + json::value_to<std::string>(endpoint.at("Password"));
-        std::string base64_encoded_credentials = "Basic " + base64::encode(credentials);
+        std::string base64_encoded_credentials = "Basic " + base64_encode(credentials);
         authentication = { { http::field::authorization, base64_encoded_credentials, } };
     }
 
@@ -460,7 +479,7 @@ json::value getJsonFile(const std::string& path)
         std::ifstream ifs(path);
         std::string content((std::istreambuf_iterator<char>(ifs)),
             (std::istreambuf_iterator<char>()));
-
+        std::cout << content << std::endl;
         json_content = json::parse(content);
     }
     catch (std::exception const& e)
@@ -481,7 +500,7 @@ json::array getAppSettings()
     json::array app_settings = getJsonFile("appsettings.json").at("Endpoints").as_array();
 
     // for each endpoint construct the check base and OMF endpoint and populate default values
-    for (int i = 0; i < app_settings.size(); i++)
+    for (uint8_t i = 0; i < app_settings.size(); i++)
     {
         // add the BaseEndpoint and OmfEndpoint to the endpoint configuration
         json::object endpoint = app_settings.at(i).get_object();
@@ -549,8 +568,8 @@ void getData(json::object& data)
     {
         value2 = !value2;
         value->at("Timestamp") = getCurrentTime();
-        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
-        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100))/100);
+        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
+        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
         if (value2)
             value->at("StringEnum") = "True";
         else
