@@ -368,21 +368,32 @@ std::string gzipCompress(const std::string& request_body)
 /// <param name="body">string to url encode</param>
 /// <returns>Url encoded string</returns>
 std::string urlEncode(const std::string& body) {
+    std::map<char, std::string> encoding = { {'!', "%21"}, {'#', "%23"}, {'$', "%24"},{'%', "%25"},{'&', "%26"},
+        {'\'', "%27"},{'(', "%28"},{')', "%29"},{'*', "%2A"},{'+', "%2B"},{',', "%2C"},{'/', "%2F"},
+        {':', "%3A"},{';', "%3B"},{'=', "%3D"},{'?', "%3F"},{'@', "%40"},{'[', "%5B"},{']', "%5D"} };
+
     std::stringstream escaped;
     escaped.fill('0');
-    escaped << std::hex;
+    //escaped << std::hex;
 
-    for (uint32_t i = 0; i < body.size(); i++) {
+    for (std::string::size_type i = 0; i < body.size(); i++) {
         char ch = body.at(i);
+        auto search = encoding.find(ch);
 
-        if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
+        if (search == encoding.end())
+            escaped << ch;
+        else
+            escaped << search->second;
+
+
+        /*if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
             escaped << ch;
         else
         {
             escaped << std::uppercase;
             escaped << '%' << std::setw(2) << static_cast<int>(ch);
             escaped << std::nouppercase;
-        }
+        }*/
     }
 
     return escaped.str();
