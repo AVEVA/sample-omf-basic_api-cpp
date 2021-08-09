@@ -8,7 +8,7 @@
 
 ## Building a sample with the rest calls directly
 
-This sample doesn't use any help to build the JSON strings for the OMF messages. This works for simple examples, and for set demos, but if building something more it may be easier to not form the JSON messages by hand.
+This sample doesn't help build the JSON strings for OMF messages. This works for simple examples, and for set demos, but if building something more complex it may be easier to form the JSON messages programatically.
 
 [OMF documentation](https://omf-docs.osisoft.com/)
 
