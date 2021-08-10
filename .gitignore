@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # Credential Files
 appsettings.json
 *.cer
+product-readiness.*
