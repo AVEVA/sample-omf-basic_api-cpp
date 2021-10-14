@@ -131,17 +131,11 @@ jobs:
       - name: Endpoints.2.DataArchiveName
         value: $(DataArchiveName)
       - name: Endpoints.2.VerifySSL
-        value: false
+        value: ""
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
           secrets: 'Username, Password, PIWebAPI, DataArchiveName'
-          
-      - template: "/miscellaneous/build_templates/config.yml@templates"
-        parameters:
-          fileOriginal: $(CertFile)
-          fileLibrary: $(RootCertificateOCS)
-          filePath: '/OMF_API'
       
       - task: NuGetCommand@2
         displayName: 'Restore Packages'
@@ -201,12 +195,6 @@ jobs:
         value: false
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
-      
-      - template: "/miscellaneous/build_templates/config.yml@templates"
-        parameters:
-          fileOriginal: $(CertFile)
-          fileLibrary: $(RootCertificateOCS)
-          filePath: '/OMF_API'
       
       - task: NuGetCommand@2
         displayName: 'Restore Packages'
