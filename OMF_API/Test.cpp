@@ -31,6 +31,8 @@ bool checkCreations(json::array sent_data)
     
     for (auto& endpoint : endpoints)
     {
+        if (!endpoint.at("Selected").as_bool())
+            continue;
         
         try
         {
@@ -50,7 +52,7 @@ bool checkCreations(json::array sent_data)
 
                 // get point URLs
                 std::string request_endpoint = json::value_to<std::string>(endpoint.at("BaseEndpoint")) +
-                    "/dataservers?name=" + json::value_to<std::string>(endpoint.at("DataServerName"));
+                    "/dataservers?name=" + json::value_to<std::string>(endpoint.at("DataArchiveName"));
 
                 response = httpsRequest(
                     http::verb::get,
@@ -179,6 +181,9 @@ bool cleanup()
 
     for (auto& endpoint : endpoints)
     {
+        if (!endpoint.at("Selected").as_bool())
+            continue;
+
         try
         {
             for (auto& omf_container : omf_containers)

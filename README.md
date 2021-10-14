@@ -56,22 +56,23 @@ The format of the configuration for an OCS endpoint is shown below along with de
 {
   "EndpointType": "OCS",
   "Resource": "https://dat-b.osisoft.com",
-  "NamespaceName": "REPLACE_WITH_NAMESPACE_NAME",
-  "Tenant": "RPLACE_WITH_TENANT_ID",
-  "clientId": "REPLACE_WITH_APPLICATION_IDENTIFIER",
-  "ClientSecret": "REPLACE_WITH_APPLICATION_SECRET",
+  "NamespaceId": "PLACEHOLDER_REPLACE_WITH_NAMESPACE_NAME",
+  "TenantId": "PLACEHOLDER_REPLACE_WITH_TENANT_ID",
+  "ClientId": "PLACEHOLDER_REPLACE_WITH_APPLICATION_IDENTIFIER",
+  "ClientSecret": "PLACEHOLDER_REPLACE_WITH_APPLICATION_SECRET",
   "ApiVersion": "v1",
-  "VerifySSL": "REPLACE_WTIH_CERTIFICATE_PATH",
+  "VerifySSL": "PLACEHOLDER_REPLACE_WTIH_CERTIFICATE_PATH",
   "UseCompression": false
 }
 ```
 
 | Parameters                  | Required | Type    | Description                                                                                                                                                      |
 | --------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Selected                    | required | boolean | Tells the application if the endpoint should be sent to                                                                                                          |
 | EndpointType                | required | string  | The endpoint type. For OCS this will always be "OCS"                                                                                                             |
 | Resource                    | required | string  | The endpoint for OCS if the namespace. If the tenant/namespace is located in NA, it is https://dat-b.osisoft.com and if in EMEA, it is https://dat-d.osisoft.com |
-| NamespaceBame               | required | string  | The name of the Namespace in OCS that is being sent to                                                                                                           |
-| Tenant                      | required | string  | The Tenant ID of the Tenant in OCS that is being sent to                                                                                                         |
+| NamespaceId                 | required | string  | The name of the Namespace in OCS that is being sent to                                                                                                           |
+| TenantId                    | required | string  | The Tenant ID of the Tenant in OCS that is being sent to                                                                                                         |
 | ClientId                    | required | string  | The client ID that is being used for authenticating to OCS                                                                                                       |
 | ClientSecret                | required | string  | The client secret that is being used for authenticating to OCS                                                                                                   |
 | ApiVersion                  | required | string  | The API version of the OCS endpoint                                                                                                                              |
@@ -92,6 +93,7 @@ The format of the configuration for an EDS endpoint is shown below along with de
 
 | Parameters                  | Required | Type    | Description                                                                                                                                       |
 | --------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Selected                    | required | boolean | Tells the application if the endpoint should be sent to                                                                                           |
 | EndpointType                | required | string  | The endpoint type. For EDS this will always be "EDS"                                                                                              |
 | Resource                    | required | string  | The endpoint for EDS if the namespace. If EDS is being run on your local machine with the default configuration, it will be http://localhost:5590 |
 | ApiVersion                  | required | string  | The API version of the EDS endpoint                                                                                                               |
@@ -103,20 +105,21 @@ The format of the configuration for a PI endpoint is shown below along with desc
 ```json
 {
   "EndpointType": "PI",
-  "Resource": "REPLACE_WITH_PI_WEB_API_URL",
-  "DataServerName": "REPLACE_WITH_DATA_ARCHIVE_NAME",
-  "Username": "REPLACE_WITH_USERNAME",
-  "Password": "REPLACE_WITH_PASSWORD",
-  "VerifySSL": "REPLACE_WTIH_CERTIFICATE_PATH",
+  "Resource": "PLACEHOLDER_REPLACE_WITH_PI_WEB_API_URL",
+  "DataArchiveName": "PLACEHOLDER_REPLACE_WITH_DATA_ARCHIVE_NAME",
+  "Username": "PLACEHOLDER_REPLACE_WITH_USERNAME",
+  "Password": "PLACEHOLDER_REPLACE_WITH_PASSWORD",
+  "VerifySSL": "PLACEHOLDER_REPLACE_WTIH_CERTIFICATE_PATH",
   "UseCompression": false
 }
 ```
 
 | Parameters                  | Required | Type    | Description                                                                                                                                                |
 | --------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Selected                    | required | boolean | Tells the application if the endpoint should be sent to                                                                                                    |
 | EndpointType                | required | string  | The endpoint type. For PI this will always be "PI"                                                                                                         |
 | Resource                    | required | string  | The URL of the PI Web API                                                                                                                                  |
-| DataServerName              | required | string  | The name of the PI Data Archive that is being sent to                                                                                                      |
+| DataArchiveName             | required | string  | The name of the PI Data Archive that is being sent to                                                                                                      |
 | Username                    | required | string  | The username that is being used for authenticating to the PI Web API                                                                                       |
 | Password                    | required | string  | The password that is being used for authenticating to the PI Web API                                                                                       |
 | VerifySSL                   | optional | string  | The path to a base 64 encoded root certificate (.cer) for verifying the endpoint's certificate. If this is empty "", the certificate will not be verified. |
