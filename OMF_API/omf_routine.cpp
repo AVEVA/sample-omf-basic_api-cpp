@@ -482,7 +482,7 @@ json::value getJsonFile(const std::string& path)
             (std::istreambuf_iterator<char>()));
         std::cout << content << std::endl;
         // remove BOM if it is present
-        if (content.find("﻿") == 1)
+        if (char(content.at(0)) != '{' && char(content.at(0)) != '[')
             content.erase(0, 3);
         json_content = json::parse(content);
     }
