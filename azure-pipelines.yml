@@ -59,12 +59,6 @@ jobs:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
           secrets: 'TenantId, NamespaceId, ClientId, ClientSecret'
-          
-      - template: "/miscellaneous/build_templates/config.yml@templates"
-        parameters:
-          fileOriginal: $(CertFile)
-          fileLibrary: $(RootCertificateOCS)
-          filePath: '/OMF_API'
       
       - task: NuGetCommand@2
         displayName: 'Restore Packages'
@@ -77,6 +71,12 @@ jobs:
         inputs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
+          
+      - template: "/miscellaneous/build_templates/config.yml@templates"
+        parameters:
+          fileOriginal: $(CertFile)
+          fileLibrary: $(RootCertificateOCS)
+          filePath: '/Debug UnitTests'
 
       - task: PowerShell@1
         displayName: 'Load boost test adapter location'
