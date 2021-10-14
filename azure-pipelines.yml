@@ -246,11 +246,7 @@ jobs:
       name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
     steps:
-      - template: "/miscellaneous/build_templates/config.yml@templates"
-        parameters:
-          fileOriginal: $(CredFile)
-          fileLibrary: $(CredFileLibraryPI)
-          filePath: /OMF_API
+      - template: '/miscellaneous/build_templates/appsettings.yml@templates'
       
       - task: NuGetCommand@2
         displayName: 'Restore Packages'
