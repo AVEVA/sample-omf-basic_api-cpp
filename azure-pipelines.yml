@@ -10,7 +10,7 @@ pr:
       - main
 
 schedules:
-  - cron: "0 0 * * 0"
+  - cron: '0 0 * * 0'
     displayName: Weekly build
     branches:
       include:
@@ -25,7 +25,7 @@ resources:
       endpoint: osisoft/OSI-Samples
 
 variables:
-  - template: "/miscellaneous/build_templates/variables.yml@templates"
+  - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: CertFile
     value: cert.cer
   - name: RootCertificateOCS
@@ -72,7 +72,7 @@ jobs:
           configuration: $(BuildConfiguration)
           platform: $(BuildPlatform)
           
-      - template: "/miscellaneous/build_templates/config.yml@templates"
+      - template: '/miscellaneous/build_templates/config.yml@templates'
         parameters:
           fileOriginal: $(CertFile)
           fileLibrary: $(RootCertificateOCS)
@@ -131,7 +131,7 @@ jobs:
       - name: Endpoints.2.DataArchiveName
         value: $(DataArchiveName)
       - name: Endpoints.2.VerifySSL
-        value: ""
+        value: ''
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
