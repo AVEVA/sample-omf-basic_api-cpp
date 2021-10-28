@@ -384,16 +384,6 @@ std::string urlEncode(const std::string& body) {
             escaped << ch;
         else
             escaped << search->second;
-
-
-        /*if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~')
-            escaped << ch;
-        else
-        {
-            escaped << std::uppercase;
-            escaped << '%' << std::setw(2) << static_cast<int>(ch);
-            escaped << std::nouppercase;
-        }*/
     }
 
     return escaped.str();
@@ -491,6 +481,9 @@ json::value getJsonFile(const std::string& path)
         std::string content((std::istreambuf_iterator<char>(ifs)),
             (std::istreambuf_iterator<char>()));
         std::cout << content << std::endl;
+        // remove BOM if it is present
+        if (char(content.at(0)) != '{' && char(content.at(0)) != '[')
+            content.erase(0, 3);
         json_content = json::parse(content);
     }
     catch (std::exception const& e)
@@ -521,8 +514,8 @@ json::array getAppSettings()
         if (type == TYPE_OCS)
         {
             std::string ApiVersion = json::value_to<std::string>(endpoint.at("ApiVersion"));
-            std::string Tenant = json::value_to<std::string>(endpoint.at("Tenant"));
-            std::string NamespaceName = json::value_to<std::string>(endpoint.at("NamespaceName"));
+            std::string Tenant = json::value_to<std::string>(endpoint.at("TenantId"));
+            std::string NamespaceName = json::value_to<std::string>(endpoint.at("NamespaceId"));
             endpoint["BaseEndpoint"] = Resource + "/api/" + ApiVersion +
                 "/Tenants/" + Tenant + "/namespaces/" + NamespaceName;
         }
@@ -622,6 +615,9 @@ bool omfRoutine(json::array& sent_data, bool test)
         //Send out the messages that only need to be sent once
         for (auto& endpoint : endpoints)
         {
+            if (!endpoint.at("Selected").as_bool())
+                continue;
+
             if (json::value_to<std::string>(endpoint.at("VerifySSL")) == "")
             {
                 std::cout << "You are not verifying the certificate of the end point. "
@@ -658,7 +654,8 @@ bool omfRoutine(json::array& sent_data, bool test)
 
                 for (auto& endpoint : endpoints)
                 {
-                    sendMessageToOmfEndpoint(endpoint.as_object(), "data", "[" + json::serialize(omf_datum) + "]");
+                    if (endpoint.at("Selected").as_bool())
+                        sendMessageToOmfEndpoint(endpoint.as_object(), "data", "[" + json::serialize(omf_datum) + "]");
                 }
 
                 if (test && count == 1)

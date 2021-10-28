@@ -16,6 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="appsettings.placeholder.json">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,9 +44,6 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="appsettings.json">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="appsettings.placeholder.json">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="OMF-Types.json">
