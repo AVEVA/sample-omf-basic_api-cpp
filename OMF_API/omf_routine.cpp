@@ -294,13 +294,13 @@ json::value request(http::verb verb, const std::string& endpoint, const std::map
     );
 }
 
-/// <summary>Retrieves the bearer token used for OCS requests</summary>
+/// <summary>Retrieves the bearer token used for ADH requests</summary>
 /// <param name="endpoint">Json endpoint object for determining what endpoint to retrieve the token for 
 /// and to store the token after it has been retrieved</param>
-/// <returns>Bearer token for OCS</returns>
+/// <returns>Bearer token for ADH</returns>
 std::string getToken(json::object& endpoint)
 {
-    if (endpoint.at("EndpointType") != TYPE_OCS)
+    if (endpoint.at("EndpointType") != TYPE_ADH)
         return "";
 
     // check for an existing token and check that it is not expired
@@ -315,7 +315,7 @@ std::string getToken(json::object& endpoint)
     std::string ClientId = urlEncode(json::value_to<std::string>(endpoint.at("ClientId")));
 
     // Get Token Endpoint
-    std::string open_id_endpoint = "https://dat-b.osisoft.com/identity/.well-known/openid-configuration";
+    std::string open_id_endpoint = "https://uswe.datahub.connect.aveva.com/identity/.well-known/openid-configuration";
     std::map<std::string, std::string> request_headers = { {"Accept", "application/json",} };
 
     json::value response_body = {};
@@ -435,7 +435,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message
     if (compression == "gzip")
         request_headers.insert({ "compression", "gzip", });
 
-    if (endpoint.at("EndpointType").as_string() == TYPE_OCS)
+    if (endpoint.at("EndpointType").as_string() == TYPE_ADH)
         request_headers.insert({ "Authorization", "Bearer " + getToken(endpoint) });
     else if (endpoint.at("EndpointType").as_string() == TYPE_PI)
     {
@@ -511,7 +511,7 @@ json::array getAppSettings()
         std::string type = json::value_to<std::string>(endpoint.at("EndpointType"));
         std::string Resource = json::value_to<std::string>(endpoint.at("Resource"));
 
-        if (type == TYPE_OCS)
+        if (type == TYPE_ADH)
         {
             std::string ApiVersion = json::value_to<std::string>(endpoint.at("ApiVersion"));
             std::string Tenant = json::value_to<std::string>(endpoint.at("TenantId"));
