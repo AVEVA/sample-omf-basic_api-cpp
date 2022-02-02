@@ -37,7 +37,7 @@ jobs:
   - job: Tests_OCS
     pool:
       name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      demands: Agent.OS -equals Windows_NT
     variables:
       - name: Endpoints.0.Selected
         value: true
