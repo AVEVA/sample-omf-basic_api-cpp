@@ -13,8 +13,8 @@ project:
 capture:
   build:
     cleanCommands:
-      - shell: ['vsdevcmd', '&', 'msbuild', '-t:clean']
+      - shell: ['msbuild', '-t:clean']
     buildCommands:
-      - shell: ['vsdevcmd', '&', 'msbuild']
+      - shell: ['msbuild']
 analyze:
   mode: central
