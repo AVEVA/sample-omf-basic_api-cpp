@@ -315,7 +315,7 @@ std::string getToken(json::object& endpoint)
     std::string ClientId = urlEncode(json::value_to<std::string>(endpoint.at("ClientId")));
 
     // Get Token Endpoint
-    std::string resource = json::value_to<std::string>(endpoint.at("Resource")
+    std::string resource = json::value_to<std::string>(endpoint.at("Resource"));
     std::string open_id_endpoint = resource + "/identity/.well-known/openid-configuration";
     std::map<std::string, std::string> request_headers = { {"Accept", "application/json",} };
 
