@@ -1,10 +1,13 @@
-# Building a C++ sample to send OMF to PI or OCS
+# Building a C++ sample to send OMF to PI or ADH
 
-**Version**: 1.0.2
+| :loudspeaker: **Notice**: Samples have been updated to reflect that they work on AVEVA Data Hub. The samples also work on OSIsoft Cloud Services unless otherwise noted. |
+| -----------------------------------------------------------------------------------------------|  
 
-| OCS Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
+**Version**: 1.0.3
+
+| ADH Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/osisoft.sample-omf-basic_api-cpp?repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main&jobName=Tests_OCS)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/osisoft.sample-omf-basic_api-cpp?repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main&jobName=Tests_EDS)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/osisoft.sample-omf-basic_api-cpp?repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main&jobName=Tests_PI)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&repoName=osisoft%2Fsample-omf-basic_api-cpp&branchName=main) |
+| [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_ADH)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_EDS)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_PI)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) |
 
 ## Building a sample with the rest calls directly
 
@@ -47,15 +50,15 @@ Finally, if there are any other activities that you would like to be running con
 
 The sample is configured using the file [appsettings.placeholder.json](OMF_API/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
 
-The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: [OCS](#ocs-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
+The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: [ADH](#ocs-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
 
-### OCS Endpoint Configuration
-The format of the configuration for an OCS endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
+### ADH Endpoint Configuration
+The format of the configuration for an ADH endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
 
 ```json
 {
-  "EndpointType": "OCS",
-  "Resource": "https://dat-b.osisoft.com",
+  "EndpointType": "ADH",
+  "Resource": "https://uswe.datahub.connect.aveva.com",
   "NamespaceId": "PLACEHOLDER_REPLACE_WITH_NAMESPACE_NAME",
   "TenantId": "PLACEHOLDER_REPLACE_WITH_TENANT_ID",
   "ClientId": "PLACEHOLDER_REPLACE_WITH_APPLICATION_IDENTIFIER",
@@ -69,17 +72,17 @@ The format of the configuration for an OCS endpoint is shown below along with de
 | Parameters                  | Required | Type    | Description                                                                                                                                                      |
 | --------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Selected                    | required | boolean | Tells the application if the endpoint should be sent to                                                                                                          |
-| EndpointType                | required | string  | The endpoint type. For OCS this will always be "OCS"                                                                                                             |
-| Resource                    | required | string  | The endpoint for OCS if the namespace. If the tenant/namespace is located in NA, it is https://dat-b.osisoft.com and if in EMEA, it is https://dat-d.osisoft.com |
-| NamespaceId                 | required | string  | The name of the Namespace in OCS that is being sent to                                                                                                           |
-| TenantId                    | required | string  | The Tenant ID of the Tenant in OCS that is being sent to                                                                                                         |
-| ClientId                    | required | string  | The client ID that is being used for authenticating to OCS                                                                                                       |
-| ClientSecret                | required | string  | The client secret that is being used for authenticating to OCS                                                                                                   |
-| ApiVersion                  | required | string  | The API version of the OCS endpoint                                                                                                                              |
+| EndpointType                | required | string  | The endpoint type. For ADH this will always be "ADH"                                                                                                             |
+| Resource                    | required | string  | The endpoint for ADH if the namespace. If the tenant/namespace is located in NA, it is https://uswe.datahub.connect.aveva.com and if in EMEA, it is https://euno.datahub.connect.aveva.com  |
+| NamespaceId                 | required | string  | The name of the Namespace in ADH that is being sent to                                                                                                           |
+| TenantId                    | required | string  | The Tenant ID of the Tenant in ADH that is being sent to                                                                                                         |
+| ClientId                    | required | string  | The client ID that is being used for authenticating to ADH                                                                                                       |
+| ClientSecret                | required | string  | The client secret that is being used for authenticating to ADH                                                                                                   |
+| ApiVersion                  | required | string  | The API version of the ADH endpoint                                                                                                                              |
 | VerifySSL                   | optional | string  | The path to a base 64 encoded root certificate (.cer) for verifying the endpoint's certificate. If this is empty "", the certificate will not be verified.       |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the OCS endpoint                                                                                     |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                                     |
 
-### EDS Endpoint Configurations
+### EDS Endpoint Configuration
 The format of the configuration for an EDS endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
 
 ```json
@@ -97,7 +100,7 @@ The format of the configuration for an EDS endpoint is shown below along with de
 | EndpointType                | required | string  | The endpoint type. For EDS this will always be "EDS"                                                                                              |
 | Resource                    | required | string  | The endpoint for EDS if the namespace. If EDS is being run on your local machine with the default configuration, it will be http://localhost:5590 |
 | ApiVersion                  | required | string  | The API version of the EDS endpoint                                                                                                               |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the OCS endpoint                                                                      |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                      |
 
 ### PI Endpoint Configuration
 The format of the configuration for a PI endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
@@ -123,7 +126,7 @@ The format of the configuration for a PI endpoint is shown below along with desc
 | Username                    | required | string  | The username that is being used for authenticating to the PI Web API                                                                                       |
 | Password                    | required | string  | The password that is being used for authenticating to the PI Web API                                                                                       |
 | VerifySSL                   | optional | string  | The path to a base 64 encoded root certificate (.cer) for verifying the endpoint's certificate. If this is empty "", the certificate will not be verified. |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the OCS endpoint                                                                               |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                               |
 
 ---
 

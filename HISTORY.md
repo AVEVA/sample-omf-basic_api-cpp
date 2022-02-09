@@ -1,5 +1,9 @@
 # Version History
 
+## 1.0.3 / 2022-02-10
+
+- Updated for AVEVA Data Hub
+
 ## 1.0.2 / 2022-02-09
 
 - Changed agent used in pipeline
