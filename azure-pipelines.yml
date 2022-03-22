@@ -43,7 +43,7 @@ jobs:
       name: 00-OSIManaged-Test
       demands:
       - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      - SKU -equals VSEnterprise2022
     variables:
       - name: Endpoints.0.Selected
         value: true
@@ -90,7 +90,7 @@ jobs:
         displayName: 'Load boost test adapter location'
         inputs:
           scriptType: inlineScript
-          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"'
           inlineScript: |
             Param(
                 [string]$VisualStudioLocation
@@ -124,7 +124,7 @@ jobs:
       name: 00-OSIManaged-Test
       demands:
       - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      - SKU -equals VSEnterprise2022
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -163,7 +163,7 @@ jobs:
         displayName: 'Load boost test adapter location'
         inputs:
           scriptType: inlineScript
-          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"'
           inlineScript: |
             Param(
                 [string]$VisualStudioLocation
@@ -197,7 +197,7 @@ jobs:
       name: 00-OSIManaged-Test
       demands:
       - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      - SKU -equals VSEnterprise2022
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -224,7 +224,7 @@ jobs:
         displayName: 'Load boost test adapter location'
         inputs:
           scriptType: inlineScript
-          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"'
           inlineScript: |
             Param(
                 [string]$VisualStudioLocation
