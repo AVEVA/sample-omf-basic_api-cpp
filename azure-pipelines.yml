@@ -40,7 +40,7 @@ variables:
 jobs:
   - job: Tests_ADH
     pool:
-      name: 00-OSIManaged-Test
+      name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
     variables:
@@ -120,7 +120,7 @@ jobs:
 
   - job: Tests_PI
     pool:
-      name: 00-OSIManaged-Test
+      name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
     variables:
@@ -192,7 +192,7 @@ jobs:
   
   - job: Tests_EDS
     pool:
-      name: 00-OSIManaged-Test
+      name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
     variables:
