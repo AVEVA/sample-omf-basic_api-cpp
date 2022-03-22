@@ -43,6 +43,7 @@ jobs:
       name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
+      - SKU -equals VSBuildTools
     variables:
       - name: Endpoints.0.Selected
         value: true
@@ -123,6 +124,7 @@ jobs:
       name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
+      - SKU -equals VSBuildTools
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -195,6 +197,7 @@ jobs:
       name: 00-OSIManaged-Build
       demands:
       - Agent.OS -equals Windows_NT
+      - SKU -equals VSBuildTools
     variables:
       - name: Endpoints.0.Selected
         value: false
