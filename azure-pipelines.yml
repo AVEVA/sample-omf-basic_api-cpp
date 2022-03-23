@@ -40,8 +40,10 @@ variables:
 jobs:
   - job: Tests_ADH
     pool:
-      name: 00-OSIManaged-Test
-      demands: Agent.OS -equals Windows_NT
+      name: 00-OSIManaged-Build
+      demands:
+      - Agent.OS -equals Windows_NT
+      - SKU -equals VSEnterprise
     variables:
       - name: Endpoints.0.Selected
         value: true
@@ -119,8 +121,10 @@ jobs:
 
   - job: Tests_PI
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: 00-OSIManaged-Build
+      demands:
+      - Agent.OS -equals Windows_NT
+      - SKU -equals VSEnterprise
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -190,8 +194,10 @@ jobs:
   
   - job: Tests_EDS
     pool:
-      name: 00-OSIManaged-Test
-      demands: Agent.OS -equals Windows_NT
+      name: 00-OSIManaged-Build
+      demands:
+      - Agent.OS -equals Windows_NT
+      - SKU -equals VSEnterprise
     variables:
       - name: Endpoints.0.Selected
         value: false
