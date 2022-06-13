@@ -27,6 +27,7 @@ resources:
       type: github
       name: osisoft/OSI-Samples
       endpoint: osisoft/OSI-Samples
+      ref: update-demands
 
 variables:
   - template: '/miscellaneous/build_templates/variables.yml@templates'
