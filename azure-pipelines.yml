@@ -37,13 +37,20 @@ variables:
   - name: analysisProject
     value: OMF_API_CPP
 
+parameters:
+  - name: containerDemandsADH
+    default: SKU -equals VSEnterprise
+  - name: containerDemandsEDS
+    default: SKU -equals VSEnterprise
+  - name: containerDemandsOnPrem
+    default: SKU -equals VSEnterprise
+
+
 jobs:
   - job: Tests_ADH
     pool:
       name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      demands: ${{ parameters.containerDemandsADH }}
     variables:
       - name: Endpoints.0.Selected
         value: true
@@ -122,9 +129,7 @@ jobs:
   - job: Tests_PI
     pool:
       name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      demands: ${{ parameters.containerDemandsOnPrem }}
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -195,9 +200,7 @@ jobs:
   - job: Tests_EDS
     pool:
       name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise
+      demands: ${{ parameters.containerDemandsEDS }}
     variables:
       - name: Endpoints.0.Selected
         value: false

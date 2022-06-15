@@ -1,5 +1,9 @@
 # Version History
 
+## 1.0.5 / 2022-06-15
+
+- Parameterize Azure Pipeline container demands
+
 ## 1.0.4 / 2022-03-22
 
 - Changed agent used in pipeline
