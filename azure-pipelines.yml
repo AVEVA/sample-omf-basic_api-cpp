@@ -163,7 +163,7 @@ jobs:
         displayName: 'Load boost test adapter location'
         inputs:
           scriptType: inlineScript
-          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"'
           inlineScript: |
             Param(
                 [string]$VisualStudioLocation
@@ -224,7 +224,7 @@ jobs:
         displayName: 'Load boost test adapter location'
         inputs:
           scriptType: inlineScript
-          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"'
+          arguments: '-VisualStudioLocation:"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise"'
           inlineScript: |
             Param(
                 [string]$VisualStudioLocation
