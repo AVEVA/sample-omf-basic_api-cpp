@@ -39,6 +39,7 @@ variables:
 
 jobs:
   - job: Tests_ADH
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
       name: 00-OSIManaged-Build
       demands:
@@ -120,6 +121,7 @@ jobs:
         condition: succeededOrFailed()
 
   - job: Tests_PI
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
       name: 00-OSIManaged-Build
       demands:
@@ -193,6 +195,7 @@ jobs:
         condition: succeededOrFailed()
   
   - job: Tests_EDS
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
       name: 00-OSIManaged-Build
       demands:
