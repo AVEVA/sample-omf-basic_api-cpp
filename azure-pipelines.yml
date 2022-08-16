@@ -37,13 +37,29 @@ variables:
   - name: analysisProject
     value: OMF_API_CPP
 
+parameters:
+  - name: poolADH
+    default: 00-OSIManaged-Build
+  - name: containerDemandsADH
+    type: object
+    default: ['Agent.OS -equals Windows_NT', 'SKU -equals VSEnterprise2022']
+  - name: poolPI
+    default: 00-OSIManaged-Build
+  - name: containerDemandsPI
+    type: object
+    default: ['Agent.OS -equals Windows_NT', 'SKU -equals VSEnterprise2022']
+  - name: poolEDS
+    default: 00-OSIManaged-Build
+  - name: containerDemandsEDS
+    type: object
+    default: ['Agent.OS -equals Windows_NT', 'SKU -equals VSEnterprise2022']
+
 jobs:
   - job: Tests_ADH
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
-      name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise2022
+      name: ${{ parameters.poolADH }}
+      demands: ${{ parameters.containerDemandsADH }}
     variables:
       - name: Endpoints.0.Selected
         value: true
@@ -120,11 +136,10 @@ jobs:
         condition: succeededOrFailed()
 
   - job: Tests_PI
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
-      name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise2022
+      name: ${{ parameters.poolPI }}
+      demands: ${{ parameters.containerDemandsPI }}
     variables:
       - name: Endpoints.0.Selected
         value: false
@@ -193,11 +208,10 @@ jobs:
         condition: succeededOrFailed()
   
   - job: Tests_EDS
+    condition: ne(variables['Build.Reason'], 'Schedule')
     pool:
-      name: 00-OSIManaged-Build
-      demands:
-      - Agent.OS -equals Windows_NT
-      - SKU -equals VSEnterprise2022
+      name: ${{ parameters.poolEDS }}
+      demands: ${{ parameters.containerDemandsEDS }}
     variables:
       - name: Endpoints.0.Selected
         value: false

@@ -1,5 +1,11 @@
 # Version History
 
+## 1.0.7 / 2022-08-09
+
+- Add dependabot.yml to automate dependency checks
+- Remove weekly tests
+- Parameterize pool and demands
+
 ## 1.0.6 / 2022-06-20
 
 - Updated pipeline to point to new version of VS
