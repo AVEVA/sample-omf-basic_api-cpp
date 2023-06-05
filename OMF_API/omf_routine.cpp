@@ -574,8 +574,8 @@ void getData(json::object& data)
     {
         value2 = !value2;
         value->at("Timestamp") = getCurrentTime();
-        value->at("NumberProperty1") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
-        value->at("NumberProperty2") = std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100);
+        value->at("NumberProperty1") = static_cast <int> (std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100));
+        value->at("NumberProperty2") = static_cast <int> (std::trunc(100 * static_cast <float> (rand()) / (static_cast <float> (RAND_MAX) / 100)/100));
         if (value2)
             value->at("StringEnum") = "True";
         else
