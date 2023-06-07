@@ -20,8 +20,8 @@ variables:
   - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: CertFile
     value: cert.cer
-  - name: RootCertificateOCS
-    value: product-readiness.omf-basic_api-cpp.ocs.cer
+  - name: RootCertificateADH
+    value: product-readiness.omf-basic_api-cpp.adh.cer
 
 parameters:
   - name: poolADH
@@ -84,7 +84,7 @@ jobs:
       - template: '/miscellaneous/build_templates/config.yml@templates'
         parameters:
           fileOriginal: $(CertFile)
-          fileLibrary: $(RootCertificateOCS)
+          fileLibrary: $(RootCertificateADH)
           filePath: '/Debug UnitTests'
 
       - task: PowerShell@1

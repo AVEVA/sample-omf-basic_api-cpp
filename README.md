@@ -1,8 +1,5 @@
 # Building a C++ sample to send OMF to PI or ADH
 
-| :loudspeaker: **Notice**: Samples have been updated to reflect that they work on AVEVA Data Hub. The samples also work on OSIsoft Cloud Services unless otherwise noted. |
-| -----------------------------------------------------------------------------------------------|  
-
 **Version**: 1.0.9
 
 | ADH Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
