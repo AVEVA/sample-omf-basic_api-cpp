@@ -1,16 +1,16 @@
-# Building a C++ sample to send OMF to PI or ADH
+# Building a C++ sample to send OMF to PI or Cds
 
 **Version**: 1.0.9
 
-| ADH Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
+| Cds Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_ADH)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_EDS)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) | [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OMF/aveva.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_PI)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3580&branchName=main) |
+| [![Build Status](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_apis/build/status%2Fproduct-readiness%2FOMF%2FAVEVA.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_ADH)](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_build/latest?definitionId=16178&branchName=main) | [![Build Status](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_apis/build/status%2Fproduct-readiness%2FOMF%2FAVEVA.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_EDS)](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_build/latest?definitionId=16178&branchName=main) | [![Build Status](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_apis/build/status%2Fproduct-readiness%2FOMF%2FAVEVA.sample-omf-basic_api-cpp?branchName=main&jobName=Tests_PI)](https://dev.azure.com/AVEVA-VSTS/Cloud%20Platform/_build/latest?definitionId=16178&branchName=main) |
 
 ## Building a sample with the rest calls directly
 
 This sample doesn't help build the JSON strings for OMF messages. This works for simple examples, and for set demos, but if building something more complex it may be easier to form the JSON messages programatically.
 
-[OMF documentation](https://omf-docs.osisoft.com/)
+[OMF documentation](https://docs.aveva.com/bundle/connect-data-services/page/1263258.html)
 
 ## Prerequisites
 Install Visual Studio with C++ support. See [Install C and C++ support in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
@@ -35,7 +35,7 @@ Install Visual Studio with C++ support. See [Install C and C++ support in Visual
 This application can be customized to send your own custom types, containers, and data by modifying the [OMF-Types.json](OMF_API/OMF-Types.json), 
 [OMF-Containers.json](OMF_API/OMF-Containers.json), and [OMF-Data.json](OMF_API/OMF-Data.json) files respectively. Each one of these files contains an array of OMF json objects, which are
 created in the endpoints specified in [config.json](OMF_API/config-placeholder.json) when the application is run. For more information on forming OMF messages, please refer to our 
-[OMF version 1.1 documentation](https://omf-docs.osisoft.com/documentation_v11/Whats_New.html).  
+[OMF version 1.1 documentation](https://docs.aveva.com/search?labelkey=OSIsoft-Message-Format_1.1).  
   
 In addition to modifying the json files mentioned above, the get_data function in [program.py](OMF_API/program.py) should be updated to populate the OMF data messages specified in 
 [OMF-Data.json](OMF_API/OMF-Data.json) with data from your data source.  
@@ -47,10 +47,10 @@ Finally, if there are any other activities that you would like to be running con
 
 The sample is configured using the file [appsettings.placeholder.json](OMF_API/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
 
-The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: [ADH](#ocs-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
+The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: [Cds](#ocs-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
 
-### ADH Endpoint Configuration
-The format of the configuration for an ADH endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
+### Cds Endpoint Configuration
+The format of the configuration for an Cds endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
 
 ```json
 {
@@ -127,6 +127,6 @@ The format of the configuration for a PI endpoint is shown below along with desc
 
 ---
 
-For the general steps or switch languages see the Task [ReadMe](https://github.com/osisoft/OSI-Samples-OMF/blob/main/docs/OMF_BASIC.md)  
-For the main OMF page [ReadMe](https://github.com/osisoft/OSI-Samples-OMF)  
-For the main landing page [ReadMe](https://github.com/osisoft/OSI-Samples)
+For the general steps or switch languages see the Task [ReadMe](https://github.com/AVEVA/AVEVA-Samples-OMF/blob/main/docs/OMF_BASIC.md)  
+For the main OMF page [ReadMe](https://github.com/AVEVA/AVEVA-Samples-OMF)  
+For the main AVEVA samples page [ReadMe](https://github.com/AVEVA/AVEVA-Samples)
