@@ -295,13 +295,13 @@ json::value request(http::verb verb, const std::string& endpoint, const std::map
     );
 }
 
-/// <summary>Retrieves the bearer token used for ADH requests</summary>
+/// <summary>Retrieves the bearer token used for Cds requests</summary>
 /// <param name="endpoint">Json endpoint object for determining what endpoint to retrieve the token for 
 /// and to store the token after it has been retrieved</param>
-/// <returns>Bearer token for ADH</returns>
+/// <returns>Bearer token for Cds</returns>
 std::string getToken(json::object& endpoint)
 {
-    if (endpoint.at("EndpointType") != TYPE_ADH)
+    if (endpoint.at("EndpointType") != TYPE_CDS)
         return "";
 
     // check for an existing token and check that it is not expired
@@ -437,7 +437,7 @@ void sendMessageToOmfEndpoint(json::object& endpoint, const std::string& message
     if (compression == "gzip")
         request_headers.insert({ "compression", "gzip", });
 
-    if (endpoint.at("EndpointType").as_string() == TYPE_ADH)
+    if (endpoint.at("EndpointType").as_string() == TYPE_CDS)
         request_headers.insert({ "Authorization", "Bearer " + getToken(endpoint) });
     else if (endpoint.at("EndpointType").as_string() == TYPE_PI)
     {
@@ -513,7 +513,7 @@ json::array getAppSettings()
         std::string type = json::value_to<std::string>(endpoint.at("EndpointType"));
         std::string Resource = json::value_to<std::string>(endpoint.at("Resource"));
 
-        if (type == TYPE_ADH)
+        if (type == TYPE_CDS)
         {
             std::string ApiVersion = json::value_to<std::string>(endpoint.at("ApiVersion"));
             std::string Tenant = json::value_to<std::string>(endpoint.at("TenantId"));

@@ -23,8 +23,8 @@
 #include <ctime>
 #include <map>
 
-#define OMFVERSION "1.1"
-#define TYPE_ADH "ADH"
+#define OMFVERSION "1.2"
+#define TYPE_CDS "CDS"
 #define TYPE_EDS "EDS"
 #define TYPE_PI "PI"
 #define SEND_DELAY 1
@@ -37,7 +37,7 @@ namespace json = boost::json;            // from <boost/json.hpp>
 namespace ios = boost::iostreams;        // from <boost/iostreams>
 using tcp = net::ip::tcp;                // from <boost/asio/ip/tcp.hpp>
 
-enum ENDPOINTS { ADH, EDS, PI };
+enum ENDPOINTS { CDS, EDS, PI };
 
 json::value httpRequest(http::verb verb, const std::string& endpoint, const std::map<std::string, std::string>& request_headers = {}, const std::string& request_body = "", const std::map<http::field, std::string>& authentication = {});
 

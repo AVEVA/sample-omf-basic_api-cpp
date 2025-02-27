@@ -40,7 +40,7 @@ bool checkCreations(json::array sent_data)
 
             // form request headers
             std::map<std::string, std::string> request_headers = { {"Accept-Verbosity", "verbose",} };
-            if (endpoint.at("EndpointType").as_string() == TYPE_ADH)
+            if (endpoint.at("EndpointType").as_string() == TYPE_CDS)
                 request_headers.insert({ "Authorization", "Bearer " + getToken(endpoint.as_object()) });      
 
             if (endpoint.at("EndpointType").as_string() == TYPE_PI)
