@@ -1,5 +1,9 @@
 # Version History
 
+## 1.1.0 / 2025-02-25
+
+- Update to OMF 1.2
+
 ## 1.0.9 / 2023-03-07
 
 - Move code analysis to new pipeline
