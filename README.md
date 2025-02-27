@@ -1,6 +1,6 @@
 # Building a C++ sample to send OMF to PI or Cds
 
-**Version**: 1.0.9
+**Version**: 1.1.0
 
 | Cds Test Status                                                                                                                                                                                                                                                                                                                                           | EDS Test Status                                                                                                                                                                                                                                                                                                                                           | PI Test Status                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -15,7 +15,7 @@ This sample doesn't help build the JSON strings for OMF messages. This works for
 ## Prerequisites
 Install Visual Studio with C++ support. See [Install C and C++ support in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
 
-## To Run this Sample in Visual Studio:
+## To run this sample in Visual Studio:
 
 1. Clone the GitHub repository
 2. Open the solution file in Microsoft Visual Studio, [OMF_API.sln](OMF_API.sln)
@@ -24,13 +24,13 @@ Install Visual Studio with C++ support. See [Install C and C++ support in Visual
 5. Select the solution configuration "Release" and desired solution platform (x86 or x64) in the ribbon
 6. Click **Debug** > **Start Debugging** (or F5)
 
-## To Test this Sample in Visual Studio:
+## To test this sample in Visual Studio:
 
 1. Follow steps 1-4 from the section above
 2. Select the solution configuration "Debug UnitTests" and desired solution platform (x86 or x64) in the ribbon
 3. Click **Debug** > **Run All Tests** (or F5)
 
-## Customizing the Application
+## Customizing the application
 
 This application can be customized to send your own custom types, containers, and data by modifying the [OMF-Types.json](OMF_API/OMF-Types.json), 
 [OMF-Containers.json](OMF_API/OMF-Containers.json), and [OMF-Data.json](OMF_API/OMF-Data.json) files respectively. Each one of these files contains an array of OMF json objects, which are
@@ -43,18 +43,18 @@ In addition to modifying the json files mentioned above, the get_data function i
 Finally, if there are any other activities that you would like to be running continuously, this logic can be added under the while loop in the main() function of 
 [program.py](OMF_API/program.py).
 
-## Configure Endpoints and Authentication
+## Configure endpoints and authentication
 
 The sample is configured using the file [appsettings.placeholder.json](OMF_API/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
 
-The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: [Cds](#ocs-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
+The application can be configured to send to any number of endpoints specified in the endpoints array within appsettings.json. In addition, there are three types of endpoints: CONNECT data services [Cds](#cds-endpoint-configuration), [EDS](#eds-endpoint-configuration), and [PI](#pi-endpoint-configuration). Each of the 3 types of enpoints are configured differently and their configurations are explained in the sections below.
 
-### Cds Endpoint Configuration
+### Cds endpoint configuration
 The format of the configuration for an Cds endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
 
 ```json
 {
-  "EndpointType": "ADH",
+  "EndpointType": "CDS",
   "Resource": "https://uswe.datahub.connect.aveva.com",
   "NamespaceId": "PLACEHOLDER_REPLACE_WITH_NAMESPACE_NAME",
   "TenantId": "PLACEHOLDER_REPLACE_WITH_TENANT_ID",
@@ -69,17 +69,17 @@ The format of the configuration for an Cds endpoint is shown below along with de
 | Parameters                  | Required | Type    | Description                                                                                                                                                      |
 | --------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Selected                    | required | boolean | Tells the application if the endpoint should be sent to                                                                                                          |
-| EndpointType                | required | string  | The endpoint type. For ADH this will always be "ADH"                                                                                                             |
-| Resource                    | required | string  | The endpoint for ADH if the namespace. If the tenant/namespace is located in NA, it is https://uswe.datahub.connect.aveva.com and if in EMEA, it is https://euno.datahub.connect.aveva.com  |
-| NamespaceId                 | required | string  | The name of the Namespace in ADH that is being sent to                                                                                                           |
-| TenantId                    | required | string  | The Tenant ID of the Tenant in ADH that is being sent to                                                                                                         |
-| ClientId                    | required | string  | The client ID that is being used for authenticating to ADH                                                                                                       |
-| ClientSecret                | required | string  | The client secret that is being used for authenticating to ADH                                                                                                   |
-| ApiVersion                  | required | string  | The API version of the ADH endpoint                                                                                                                              |
+| EndpointType                | required | string  | The endpoint type. For Cds this will always be "CDS"                                                                                                             |
+| Resource                    | required | string  | The endpoint for Cds if the namespace. If the tenant/namespace is located in NA, it is https://uswe.datahub.connect.aveva.com and if in EMEA, it is https://euno.datahub.connect.aveva.com  |
+| NamespaceId                 | required | string  | The name of the Namespace in Cds that is being sent to                                                                                                           |
+| TenantId                    | required | string  | The Tenant ID of the Tenant in Cds that is being sent to                                                                                                         |
+| ClientId                    | required | string  | The client ID that is being used for authenticating to Cds                                                                                                       |
+| ClientSecret                | required | string  | The client secret that is being used for authenticating to Cds                                                                                                   |
+| ApiVersion                  | required | string  | The API version of the Cds endpoint                                                                                                                              |
 | VerifySSL                   | optional | string  | The path to a base 64 encoded root certificate (.cer) for verifying the endpoint's certificate. If this is empty "", the certificate will not be verified.       |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                                     |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the Cds endpoint                                                                                     |
 
-### EDS Endpoint Configuration
+### EDS endpoint configuration
 The format of the configuration for an EDS endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
 
 ```json
@@ -97,7 +97,7 @@ The format of the configuration for an EDS endpoint is shown below along with de
 | EndpointType                | required | string  | The endpoint type. For EDS this will always be "EDS"                                                                                              |
 | Resource                    | required | string  | The endpoint for EDS if the namespace. If EDS is being run on your local machine with the default configuration, it will be http://localhost:5590 |
 | ApiVersion                  | required | string  | The API version of the EDS endpoint                                                                                                               |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                      |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the EDS endpoint                                                                      |
 
 ### PI Endpoint Configuration
 The format of the configuration for a PI endpoint is shown below along with descriptions of each parameter. Replace all parameters with appropriate values.
@@ -123,7 +123,7 @@ The format of the configuration for a PI endpoint is shown below along with desc
 | Username                    | required | string  | The username that is being used for authenticating to the PI Web API                                                                                       |
 | Password                    | required | string  | The password that is being used for authenticating to the PI Web API                                                                                       |
 | VerifySSL                   | optional | string  | The path to a base 64 encoded root certificate (.cer) for verifying the endpoint's certificate. If this is empty "", the certificate will not be verified. |
-| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the ADH endpoint                                                                               |
+| UseCompression              | optional | boolean | A feature flag for enabling compression on messages sent to the PI endpoint                                                                               |
 
 ---
 
